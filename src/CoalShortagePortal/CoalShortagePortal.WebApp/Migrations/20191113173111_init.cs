@@ -48,6 +48,66 @@ namespace CoalShortagePortal.WebApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CoalShortageResponses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    DataDate = table.Column<DateTime>(type: "date", nullable: false),
+                    Station = table.Column<string>(nullable: false),
+                    Location = table.Column<string>(nullable: false),
+                    Agency = table.Column<string>(nullable: false),
+                    Capacity = table.Column<double>(nullable: false),
+                    PrevDayAvgMw = table.Column<double>(nullable: false),
+                    GenLossMw = table.Column<double>(nullable: false),
+                    Remarks = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CoalShortageResponses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CriticalCoalResponses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    DataDate = table.Column<DateTime>(type: "date", nullable: false),
+                    Station = table.Column<string>(nullable: false),
+                    Owner = table.Column<string>(nullable: false),
+                    Capacity = table.Column<double>(nullable: false),
+                    PresentGenMw = table.Column<double>(nullable: false),
+                    CoalGenLossMw = table.Column<double>(nullable: false),
+                    PresentCoalStockDays = table.Column<double>(nullable: false),
+                    Remarks = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CriticalCoalResponses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OtherReasonsResponse",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    DataDate = table.Column<DateTime>(type: "date", nullable: false),
+                    Station = table.Column<string>(nullable: false),
+                    Location = table.Column<string>(nullable: false),
+                    Agency = table.Column<string>(nullable: false),
+                    Capacity = table.Column<double>(nullable: false),
+                    PrevDayAvgMw = table.Column<double>(nullable: false),
+                    GenLossMw = table.Column<double>(nullable: false),
+                    Remarks = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OtherReasonsResponse", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -153,6 +213,80 @@ namespace CoalShortagePortal.WebApp.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "GeneratingStationForCoalShortages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    StartDate = table.Column<DateTime>(type: "date", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "date", nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Location = table.Column<string>(nullable: false),
+                    Agency = table.Column<string>(nullable: false),
+                    Capacity = table.Column<double>(nullable: false),
+                    UserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GeneratingStationForCoalShortages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GeneratingStationForCoalShortages_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GeneratingStationForCriticalCoals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    StartDate = table.Column<DateTime>(type: "date", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "date", nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Owner = table.Column<string>(nullable: false),
+                    Capacity = table.Column<double>(nullable: false),
+                    UserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GeneratingStationForCriticalCoals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GeneratingStationForCriticalCoals_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GeneratingStationForOtherReasons",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    StartDate = table.Column<DateTime>(type: "date", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "date", nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Location = table.Column<string>(nullable: false),
+                    Agency = table.Column<string>(nullable: false),
+                    Capacity = table.Column<double>(nullable: false),
+                    UserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GeneratingStationForOtherReasons", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GeneratingStationForOtherReasons_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -189,6 +323,21 @@ namespace CoalShortagePortal.WebApp.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GeneratingStationForCoalShortages_UserId",
+                table: "GeneratingStationForCoalShortages",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GeneratingStationForCriticalCoals_UserId",
+                table: "GeneratingStationForCriticalCoals",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GeneratingStationForOtherReasons_UserId",
+                table: "GeneratingStationForOtherReasons",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -207,6 +356,24 @@ namespace CoalShortagePortal.WebApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "CoalShortageResponses");
+
+            migrationBuilder.DropTable(
+                name: "CriticalCoalResponses");
+
+            migrationBuilder.DropTable(
+                name: "GeneratingStationForCoalShortages");
+
+            migrationBuilder.DropTable(
+                name: "GeneratingStationForCriticalCoals");
+
+            migrationBuilder.DropTable(
+                name: "GeneratingStationForOtherReasons");
+
+            migrationBuilder.DropTable(
+                name: "OtherReasonsResponse");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

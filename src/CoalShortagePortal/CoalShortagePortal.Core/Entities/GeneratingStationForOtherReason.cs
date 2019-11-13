@@ -1,14 +1,12 @@
 ﻿using CoalShortagePortal.Core.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
-using Microsoft.AspNetCore.Identity;
 
 namespace CoalShortagePortal.Core.Entities
 {
-    public class GeneratingStationForCoalShortage : BaseEntity, IAggregateRoot
+    public class GeneratingStationForOtherReason : BaseEntity, IAggregateRoot
     {
         [Column(TypeName = "date")]
         public DateTime StartDate { get; set; }
@@ -21,7 +19,6 @@ namespace CoalShortagePortal.Core.Entities
         [Required]
         public string Agency { get; set; }
         public double Capacity { get; set; }
-
         public IdentityUser User { get; set; }
         public string UserId { get; set; }
     }
