@@ -12,7 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using CoalShortagePortal.Data;
-using CoalShortagePortal.WebApp.Security;
+using CoalShortagePortal.Application.Security;
 
 namespace CoalShortagePortal.WebApp
 {
@@ -68,7 +68,14 @@ namespace CoalShortagePortal.WebApp
             app.UseAuthentication();
             app.UseAuthorization();
 
-            AppIdentityInitializer.SeedData(userManager, roleManager, Configuration);
+            // seed Admin User and Admin, Guest Roles
+            AppIdentityInitializer identityInitializer = new AppIdentityInitializer()
+            {
+                UserManager = userManager,
+                RoleManager = roleManager,
+                Configuration = Configuration
+            };
+            identityInitializer.SeedData();
 
             app.UseEndpoints(endpoints =>
             {

@@ -14,3 +14,10 @@ This project is supposed to contain
 
 ## Notes
 * EF Core set Datetime as database 'Date' column type - https://www.meziantou.net/entity-framework-core-specifying-data-type-length-and-precision.htm
+* Drop all tables in database
+
+```sql
+select 'drop table if exists "' || tablename || '" cascade;' 
+  from pg_tables
+ where schemaname = 'public'; -- or any other schema
+```

@@ -388,12 +388,10 @@ namespace CoalShortagePortal.WebApp.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("text");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("text");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("text");
@@ -430,12 +428,10 @@ namespace CoalShortagePortal.WebApp.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("text");
 
                     b.Property<string>("Value")
                         .HasColumnType("text");

@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CoalShortagePortal.WebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191113173111_init")]
+    [Migration("20191114114316_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -390,12 +390,10 @@ namespace CoalShortagePortal.WebApp.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("text");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("text");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("text");
@@ -432,12 +430,10 @@ namespace CoalShortagePortal.WebApp.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("text");
 
                     b.Property<string>("Value")
                         .HasColumnType("text");

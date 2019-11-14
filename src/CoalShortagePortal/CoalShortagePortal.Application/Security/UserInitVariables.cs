@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace CoalShortagePortal.WebApp.Security
+namespace CoalShortagePortal.Application.Security
 {
     public class UserInitVariables
     {

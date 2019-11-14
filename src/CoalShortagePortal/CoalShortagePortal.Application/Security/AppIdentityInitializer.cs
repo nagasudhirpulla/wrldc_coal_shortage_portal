@@ -1,35 +1,35 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using CoalShortagePortal.Core.Interfaces.Security;
 
-namespace CoalShortagePortal.WebApp.Security
+namespace CoalShortagePortal.Application.Security
 {
-    public static class AppIdentityInitializer
+    public class AppIdentityInitializer : IAppIdentityInitializer
     {
         private static readonly string GuestUserRoleString = "GuestUser";
         private static readonly string AdministratorRoleString = "Administrator";
+        public UserManager<IdentityUser> UserManager { get; set; }
+        public RoleManager<IdentityRole> RoleManager { get; set; }
+        public IConfiguration Configuration { get; set; }
 
         /**
          * This method seeds admin, guest role and admin user
          * **/
-        public static void SeedData(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration Configuration)
+        public void SeedData()
         {
             // get admin params from configuration
             UserInitVariables initVariables = new UserInitVariables();
             initVariables.InitializeFromConfig(Configuration);
             // seed roles
-            SeedUserRoles(roleManager);
+            SeedUserRoles(RoleManager);
             // seed admin user
-            SeedAdminUser(userManager, initVariables);
+            SeedAdminUser(UserManager, initVariables);
         }
 
         /**
          * This method seeds admin user
          * **/
-        public static void SeedAdminUser(UserManager<IdentityUser> userManager, UserInitVariables initVariables)
+        public void SeedAdminUser(UserManager<IdentityUser> userManager, UserInitVariables initVariables)
         {
             string AdminUserName = initVariables.AdminUserName;
             string AdminEmail = initVariables.AdminEmail;
@@ -58,7 +58,7 @@ namespace CoalShortagePortal.WebApp.Security
         /**
          * This method seeds roles
          * **/
-        public static void SeedUserRoles(RoleManager<IdentityRole> roleManager)
+        public void SeedUserRoles(RoleManager<IdentityRole> roleManager)
         {
             // check if role doesn't exist
             if (!roleManager.RoleExistsAsync(GuestUserRoleString).Result)
