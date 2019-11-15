@@ -63,8 +63,8 @@ namespace CoalShortagePortal.WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = vm.Username, Email = vm.Email };
-                var result = await _userManager.CreateAsync(user, vm.Password);
+                IdentityUser user = new IdentityUser { UserName = vm.Username, Email = vm.Email };
+                IdentityResult result = await _userManager.CreateAsync(user, vm.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
@@ -86,14 +86,14 @@ namespace CoalShortagePortal.WebApp.Controllers
             {
                 return NotFound();
             }
-            
+
             IdentityUser user = await _userManager.FindByIdAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            UserCreateVM vm = new UserCreateVM()
+            UserEditVM vm = new UserEditVM()
             {
                 Email = user.Email,
                 Username = user.UserName
@@ -101,10 +101,150 @@ namespace CoalShortagePortal.WebApp.Controllers
             return View(vm);
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, UserEditVM vm)
+        {
+            if (ModelState.IsValid)
+            {
+                if (id == null)
+                {
+                    return NotFound();
+                }
+
+                IdentityUser user = await _userManager.FindByIdAsync(id);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                List<IdentityError> identityErrors = new List<IdentityError>();
+                // change password if not null
+                string newPassword = vm.Password;
+                if (newPassword != null)
+                {
+                    string passResetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    IdentityResult passResetResult = await _userManager.ResetPasswordAsync(user, passResetToken, newPassword);
+                    if (passResetResult.Succeeded)
+                    {
+                        _logger.LogInformation("User password changed");
+                    }
+                    else
+                    {
+                        identityErrors.AddRange(passResetResult.Errors);
+                    }
+                }
+
+                // change username if changed
+                if (user.UserName != vm.Username)
+                {
+                    IdentityResult usernameChangeResult = await _userManager.SetUserNameAsync(user, vm.Username);
+                    if (usernameChangeResult.Succeeded)
+                    {
+                        _logger.LogInformation("Username changed");
+
+                    }
+                    else
+                    {
+                        identityErrors.AddRange(usernameChangeResult.Errors);
+                    }
+                }
+
+                // change email if changed
+                if (user.Email != vm.Email)
+                {
+                    string emailResetToken = await _userManager.GenerateChangeEmailTokenAsync(user, vm.Email);
+                    IdentityResult emailChangeResult = await _userManager.ChangeEmailAsync(user, vm.Email, emailResetToken);
+                    if (emailChangeResult.Succeeded)
+                    {
+                        _logger.LogInformation("email changed");
+                    }
+                    else
+                    {
+                        identityErrors.AddRange(emailChangeResult.Errors);
+                    }
+                }
+
+                // check if we have any errors and redirect if successful
+                if (identityErrors.Count == 0)
+                {
+                    _logger.LogInformation("User edit operation successful");
+
+                    return RedirectToAction(nameof(Index));
+                }
+
+                AddErrors(identityErrors);
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(vm);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            IdentityUser user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            UserDeleteVM vm = new UserDeleteVM()
+            {
+                Email = user.Email,
+                Username = user.UserName,
+                UserId = user.Id
+            };
+            return View(vm);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(UserDeleteVM vm)
+        {
+            if (ModelState.IsValid)
+            {
+                IdentityUser user = await _userManager.FindByIdAsync(vm.UserId);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                IdentityResult result = await _userManager.DeleteAsync(user);
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("User deleted successfully");
+
+                    return RedirectToAction(nameof(Index));
+                }
+
+                AddErrors(result);
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(vm);
+        }
+
         // helper function
         private void AddErrors(IdentityResult result)
         {
-            foreach (var error in result.Errors)
+            foreach (IdentityError error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+        }
+
+        // helper function
+        private void AddErrors(IEnumerable<IdentityError> errs)
+        {
+            foreach (IdentityError error in errs)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }

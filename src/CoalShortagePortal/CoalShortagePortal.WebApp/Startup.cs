@@ -43,7 +43,8 @@ namespace CoalShortagePortal.WebApp
                 options.Password.RequiredLength = 4;
                 options.Password.RequiredUniqueChars = 2;
             })
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
