@@ -13,6 +13,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using CoalShortagePortal.Data;
 using CoalShortagePortal.Application.Security;
+using CoalShortagePortal.Application;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace CoalShortagePortal.WebApp
 {
@@ -42,6 +44,10 @@ namespace CoalShortagePortal.WebApp
                 options.Password.RequiredUniqueChars = 2;
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            // Add application services.
+            services.AddTransient<IEmailSender, EmailSender>();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

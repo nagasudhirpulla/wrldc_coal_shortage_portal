@@ -1,7 +1,39 @@
 ﻿
+@model CoalShortagePortal.WebApp.Models.UserListVM
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Manage Users";
 }
 
-<h1>Index</h1>
+<h2>Manage Users</h2>
+
+@if (Model != null && Model.Users != null)
+{
+    <table class="table table-bordered table-hover">
+        <thead class="thead-light">
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td>@user.Username</td>
+                    <td>@user.Email</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@user.UserId">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@user.UserId">Delete</a>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <br />
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
 

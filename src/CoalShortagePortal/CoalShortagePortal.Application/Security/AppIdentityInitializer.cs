@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using CoalShortagePortal.Core.Interfaces.Security;
+using CoalShortagePortal.Core;
 
 namespace CoalShortagePortal.Application.Security
 {
     public class AppIdentityInitializer : IAppIdentityInitializer
     {
-        private static readonly string GuestUserRoleString = "GuestUser";
-        private static readonly string AdministratorRoleString = "Administrator";
+        
         public UserManager<IdentityUser> UserManager { get; set; }
         public RoleManager<IdentityRole> RoleManager { get; set; }
         public IConfiguration Configuration { get; set; }
@@ -50,7 +50,7 @@ namespace CoalShortagePortal.Application.Security
 
                 if (result.Succeeded)
                 {
-                    userManager.AddToRoleAsync(user, AdministratorRoleString).Wait();
+                    userManager.AddToRoleAsync(user, SecurityConstants.AdminRoleString).Wait();
                 }
             }
         }
@@ -61,23 +61,23 @@ namespace CoalShortagePortal.Application.Security
         public void SeedUserRoles(RoleManager<IdentityRole> roleManager)
         {
             // check if role doesn't exist
-            if (!roleManager.RoleExistsAsync(GuestUserRoleString).Result)
+            if (!roleManager.RoleExistsAsync(SecurityConstants.GuestRoleString).Result)
             {
                 // create desired role object
                 IdentityRole role = new IdentityRole
                 {
-                    Name = GuestUserRoleString,
+                    Name = SecurityConstants.GuestRoleString,
                 };
                 // push desired role object to DB
                 IdentityResult roleResult = roleManager.CreateAsync(role).Result;
             }
 
 
-            if (!roleManager.RoleExistsAsync(AdministratorRoleString).Result)
+            if (!roleManager.RoleExistsAsync(SecurityConstants.AdminRoleString).Result)
             {
                 IdentityRole role = new IdentityRole
                 {
-                    Name = AdministratorRoleString,
+                    Name = SecurityConstants.AdminRoleString,
                 };
                 IdentityResult roleResult = roleManager.CreateAsync(role).Result;
             }
