@@ -9,11 +9,19 @@
     <li class="nav-item">
         <a class="nav-link text-dark" asp-area="" asp-controller="UserManage" asp-action="Index">Users</a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="CoalShortageGens" asp-action="Index">Coal Shortage Generators</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="OtherReasonGens" asp-action="Index">Other Reason Generators</a>
+
+    <!-- Dropdown -->
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+            Generators
+        </a>
+        <div class="dropdown-menu">
+            <a class="nav-link text-dark" asp-area="" asp-controller="CoalShortageGens" asp-action="Index">Coal Shortage</a>
+            <hr />
+            <a class="nav-link text-dark" asp-area="" asp-controller="OtherReasonGens" asp-action="Index">Other Reason</a>
+            <hr />
+            <a class="nav-link text-dark" asp-area="" asp-controller="CriticalCoalGens" asp-action="Index">Critical Coal</a>
+        </div>
     </li>
 }
 

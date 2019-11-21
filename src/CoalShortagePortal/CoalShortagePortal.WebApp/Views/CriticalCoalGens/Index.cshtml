@@ -1,0 +1,47 @@
+﻿
+@model CoalShortagePortal.WebApp.Models.GenCriticalCoalListVM
+@{
+    ViewData["Title"] = "Manage Critical Coal Generators";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (Model != null && Model.Gens != null)
+{
+    <table class="table table-bordered table-hover">
+        <thead class="thead-light">
+            <tr>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Station</th>
+                <th>Owner</th>
+                <th>Capacity</th>
+                <th>User</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var gen in Model.Gens)
+            {
+                <tr>
+                    <td>@gen.StartDate.ToString("dd-MMM-yyyy")</td>
+                    <td>@gen.EndDate.ToString("dd-MMM-yyyy")</td>
+                    <td>@gen.Name</td>
+                    <td>@gen.Owner</td>
+                    <td>@gen.Capacity</td>
+                    <td>@gen.UserName</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@gen.Id">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@gen.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <br />
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
+

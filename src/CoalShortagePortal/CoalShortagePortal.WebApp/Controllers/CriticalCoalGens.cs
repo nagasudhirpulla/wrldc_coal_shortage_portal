@@ -16,12 +16,12 @@ using System;
 namespace CoalShortagePortal.WebApp.Controllers
 {
     [Authorize(Roles = SecurityConstants.AdminRoleString)]
-    public class CoalShortageGens : Controller
+    public class CriticalCoalGens : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger _logger;
         private readonly ApplicationDbContext _context;
-        public CoalShortageGens(UserManager<IdentityUser> userManager, ILogger<UserManageController> logger, ApplicationDbContext dbContext)
+        public CriticalCoalGens(UserManager<IdentityUser> userManager, ILogger<UserManageController> logger, ApplicationDbContext dbContext)
         {
             // acquire user manager, db context via dependency injection
             _userManager = userManager;
@@ -31,17 +31,16 @@ namespace CoalShortagePortal.WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            GenCoalShortageListVM vm = new GenCoalShortageListVM
+            GenCriticalCoalListVM vm = new GenCriticalCoalListVM
             {
                 // get the list of generators
-                Gens = await _context.GeneratingStationForCoalShortages.Select(g => new GenCoalShortageListItemVM()
+                Gens = await _context.GeneratingStationForCriticalCoals.Select(g => new GenCriticalCoalListItemVM()
                 {
                     Id = g.Id,
                     StartDate = g.StartDate,
                     EndDate = g.EndDate,
                     Name = g.Name,
-                    Location = g.Location,
-                    Agency = g.Agency,
+                    Owner = g.Owner,
                     Capacity = g.Capacity,
                     UserId = g.User.Id,
                     UserName = g.User.UserName
@@ -61,17 +60,16 @@ namespace CoalShortagePortal.WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(GenCoalShortageCreateVM vm)
+        public async Task<IActionResult> Create(GenCriticalCoalCreateVM vm)
         {
             if (ModelState.IsValid)
             {
-                GeneratingStationForCoalShortage gen = new GeneratingStationForCoalShortage
+                GeneratingStationForCriticalCoal gen = new GeneratingStationForCriticalCoal
                 {
                     StartDate = vm.StartDate,
                     EndDate = vm.EndDate,
                     Name = vm.Name,
-                    Location = vm.Location,
-                    Agency = vm.Agency,
+                    Owner = vm.Owner,
                     Capacity = vm.Capacity,
                     UserId = vm.UserId
                 };
@@ -80,13 +78,13 @@ namespace CoalShortagePortal.WebApp.Controllers
 
                 if (x == 1)
                 {
-                    _logger.LogInformation("Generator for Coal Shortage created");
+                    _logger.LogInformation("Generator for Critical Coal created");
 
                     return RedirectToAction(nameof(Index));
                 }
                 else
                 {
-                    string msg = $"Generator for Coal Shortage not created as db returned num insertions as {x}";
+                    string msg = $"Generator for Critical Coal not created as db returned num insertions as {x}";
                     _logger.LogInformation(msg);
                     //todo create custom exception
                     throw new Exception(msg);
@@ -104,8 +102,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                 return NotFound();
             }
 
-            GeneratingStationForCoalShortage gen = await _context.GeneratingStationForCoalShortages.FindAsync(id);
-            //IdentityUser user = await _userManager.FindByIdAsync(gen.UserId);
+            GeneratingStationForCriticalCoal gen = await _context.GeneratingStationForCriticalCoals.FindAsync(id);
             if (gen == null)
             {
                 return NotFound();
@@ -118,13 +115,12 @@ namespace CoalShortagePortal.WebApp.Controllers
                 throw new Exception("Start Date not be greater than end date");
             }
 
-            GenCoalShortageCreateVM vm = new GenCoalShortageCreateVM()
+            GenCriticalCoalCreateVM vm = new GenCriticalCoalCreateVM()
             {
                 StartDate = gen.StartDate,
                 EndDate = gen.EndDate,
                 Name = gen.Name,
-                Location = gen.Location,
-                Agency = gen.Agency,
+                Owner = gen.Owner,
                 Capacity = gen.Capacity,
                 UserId = gen.UserId
             };
@@ -134,11 +130,11 @@ namespace CoalShortagePortal.WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, GenCoalShortageCreateVM vm)
+        public async Task<IActionResult> Edit(int id, GenCriticalCoalCreateVM vm)
         {
             if (ModelState.IsValid)
             {
-                GeneratingStationForCoalShortage gen = await _context.GeneratingStationForCoalShortages.FindAsync(id);
+                GeneratingStationForCriticalCoal gen = await _context.GeneratingStationForCriticalCoals.FindAsync(id);
                 if (gen == null)
                 {
                     return NotFound();
@@ -154,8 +150,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                 gen.StartDate = vm.StartDate;
                 gen.EndDate = vm.EndDate;
                 gen.Name = vm.Name;
-                gen.Location = vm.Location;
-                gen.Agency = vm.Agency;
+                gen.Owner = vm.Owner;
                 gen.Capacity = vm.Capacity;
                 gen.UserId = vm.UserId;
 
@@ -167,7 +162,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     // check if the shift we are trying to edit was already deleted due to concurrency
-                    if (!_context.GeneratingStationForCoalShortages.Any(g => g.Id == id))
+                    if (!_context.GeneratingStationForCriticalCoals.Any(g => g.Id == id))
                     {
                         return NotFound();
                     }
@@ -191,19 +186,18 @@ namespace CoalShortagePortal.WebApp.Controllers
             {
                 return NotFound();
             }
-            GeneratingStationForCoalShortage gen = await _context.GeneratingStationForCoalShortages.FindAsync(id);
+            GeneratingStationForCriticalCoal gen = await _context.GeneratingStationForCriticalCoals.FindAsync(id);
             if (gen == null)
             {
                 return NotFound();
             }
 
-            GenCoalShortageCreateVM vm = new GenCoalShortageCreateVM()
+            GenCriticalCoalCreateVM vm = new GenCriticalCoalCreateVM()
             {
                 StartDate = gen.StartDate,
                 EndDate = gen.EndDate,
                 Name = gen.Name,
-                Location = gen.Location,
-                Agency = gen.Agency,
+                Owner = gen.Owner,
                 Capacity = gen.Capacity,
                 UserId = gen.UserId
             };
@@ -214,13 +208,13 @@ namespace CoalShortagePortal.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            GeneratingStationForCoalShortage gen = await _context.GeneratingStationForCoalShortages.FindAsync(id);
+            GeneratingStationForCriticalCoal gen = await _context.GeneratingStationForCriticalCoals.FindAsync(id);
             if (gen == null)
             {
                 return NotFound();
             }
 
-            _context.GeneratingStationForCoalShortages.Remove(gen);
+            _context.GeneratingStationForCriticalCoals.Remove(gen);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
