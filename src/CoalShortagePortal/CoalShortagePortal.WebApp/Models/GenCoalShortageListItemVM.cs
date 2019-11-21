@@ -11,12 +11,12 @@ namespace CoalShortagePortal.WebApp.Models
 
         [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
-        
+
         [Display(Name = "Station")]
         public string Name { get; set; }
         public string Location { get; set; }
         public string Agency { get; set; }
-        
+
         [Display(Name = "Total Capacity")]
         public double Capacity { get; set; }
 
