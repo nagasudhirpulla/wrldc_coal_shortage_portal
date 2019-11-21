@@ -50,14 +50,12 @@ namespace CoalShortagePortal.WebApp.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(UserCreateVM vm)
         {
@@ -79,7 +77,6 @@ namespace CoalShortagePortal.WebApp.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -102,7 +99,6 @@ namespace CoalShortagePortal.WebApp.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, UserEditVM vm)
         {
@@ -181,7 +177,6 @@ namespace CoalShortagePortal.WebApp.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -205,7 +200,6 @@ namespace CoalShortagePortal.WebApp.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(UserDeleteVM vm)
         {
