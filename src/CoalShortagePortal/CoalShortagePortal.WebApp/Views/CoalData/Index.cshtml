@@ -1,0 +1,181 @@
+﻿@model CoalShortagePortal.WebApp.Models.GenResponseVM
+@using CoalShortagePortal.Core.Entities
+@{
+    ViewData["Title"] = "Coal Shortage and Critical coal Data";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (Model != null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <form method="post" asp-action="Populate">
+                <input type="date" class="form-control" value="@Model.RecordDate.ToString("yyyy-MM-dd")" name="RecordDate" />
+                <span asp-validation-for="RecordDate" class="text-danger"></span>
+                <button type="submit" class="btn btn-success">Show For Date</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <form method="post" asp-action="Index">
+                <input type="hidden" class="form-control" value="@Model.RecordDate" name="RecordDate"/>
+                <hr />
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <h2>Generation loss due to coal shortage for date @Model.RecordDate.ToString("dd-MMM-yyyy")</h2>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <td>Station</td>
+                            <td>Location</td>
+                            <td>Agency</td>
+                            <td>Capacity</td>
+                            <td>Previous Day Avg (MW)</td>
+                            <td>Generation Loss (MW)</td>
+                            <td>Remarks</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int genIter = 0; genIter < Model.CoalShortageResponses.Count; genIter++)
+                        {
+                            <tr>
+                                <td>
+                                    <input asp-for="CoalShortageResponses[genIter].Station" class="form-control" />
+                                    <span asp-validation-for="CoalShortageResponses[genIter].Station" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="CoalShortageResponses[genIter].Location" class="form-control" />
+                                    <span asp-validation-for="CoalShortageResponses[genIter].Location" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="CoalShortageResponses[genIter].Agency" class="form-control" />
+                                    <span asp-validation-for="CoalShortageResponses[genIter].Agency" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="CoalShortageResponses[genIter].Capacity" class="form-control" />
+                                    <span asp-validation-for="CoalShortageResponses[genIter].Capacity" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="CoalShortageResponses[genIter].PrevDayAvgMw" class="form-control" />
+                                    <span asp-validation-for="CoalShortageResponses[genIter].PrevDayAvgMw" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="CoalShortageResponses[genIter].GenLossMw" class="form-control" />
+                                    <span asp-validation-for="CoalShortageResponses[genIter].GenLossMw" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="CoalShortageResponses[genIter].Remarks" class="form-control" />
+                                    <span asp-validation-for="CoalShortageResponses[genIter].Remarks" class="text-danger"></span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <hr />
+                <h2>Generation loss due to other reasons for date @Model.RecordDate.ToString("dd-MMM-yyyy")</h2>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <td>Station</td>
+                            <td>Location</td>
+                            <td>Agency</td>
+                            <td>Capacity</td>
+                            <td>Previous Day Avg (MW)</td>
+                            <td>Generation Loss (MW)</td>
+                            <td>Remarks</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int genIter = 0; genIter < Model.OtherReasonsResponses.Count; genIter++)
+                        {
+                            <tr>
+                                <td>
+                                    <input asp-for="OtherReasonsResponses[genIter].Station" class="form-control" />
+                                    <span asp-validation-for="OtherReasonsResponses[genIter].Station" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="OtherReasonsResponses[genIter].Location" class="form-control" />
+                                    <span asp-validation-for="OtherReasonsResponses[genIter].Location" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="OtherReasonsResponses[genIter].Agency" class="form-control" />
+                                    <span asp-validation-for="OtherReasonsResponses[genIter].Agency" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="OtherReasonsResponses[genIter].Capacity" class="form-control" />
+                                    <span asp-validation-for="OtherReasonsResponses[genIter].Capacity" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="OtherReasonsResponses[genIter].PrevDayAvgMw" class="form-control" />
+                                    <span asp-validation-for="OtherReasonsResponses[genIter].PrevDayAvgMw" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="OtherReasonsResponses[genIter].GenLossMw" class="form-control" />
+                                    <span asp-validation-for="OtherReasonsResponses[genIter].GenLossMw" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="OtherReasonsResponses[genIter].Remarks" class="form-control" />
+                                    <span asp-validation-for="OtherReasonsResponses[genIter].Remarks" class="text-danger"></span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <hr />
+                <h2>Critical Coal Stock for date @Model.RecordDate.ToString("dd-MMM-yyyy")</h2>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <td>Station</td>
+                            <td>Owner</td>
+                            <td>Capacity</td>
+                            <td>Present Generation (MW)</td>
+                            <td>Loss of Generation due to Coal Shortage (MW)</td>
+                            <td>Present Coal Stock (days)</td>
+                            <td>Remarks</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int genIter = 0; genIter < Model.CriticalCoalResponses.Count; genIter++)
+                        {
+                            <tr>
+                                <td>
+                                    <input asp-for="CriticalCoalResponses[genIter].Station" class="form-control" />
+                                    <span asp-validation-for="CriticalCoalResponses[genIter].Station" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="CriticalCoalResponses[genIter].Owner" class="form-control" />
+                                    <span asp-validation-for="CriticalCoalResponses[genIter].Owner" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="CriticalCoalResponses[genIter].Capacity" class="form-control" />
+                                    <span asp-validation-for="CriticalCoalResponses[genIter].Capacity" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="CriticalCoalResponses[genIter].PresentGenMw" class="form-control" />
+                                    <span asp-validation-for="CriticalCoalResponses[genIter].PresentGenMw" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="CriticalCoalResponses[genIter].CoalGenLossMw" class="form-control" />
+                                    <span asp-validation-for="CriticalCoalResponses[genIter].CoalGenLossMw" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="CriticalCoalResponses[genIter].PresentCoalStockDays" class="form-control" />
+                                    <span asp-validation-for="CriticalCoalResponses[genIter].PresentCoalStockDays" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="CriticalCoalResponses[genIter].Remarks" class="form-control" />
+                                    <span asp-validation-for="CriticalCoalResponses[genIter].Remarks" class="text-danger"></span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+        </div>
+    </div>
+
+}
+
