@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using CoalShortagePortal.Core;
 
 namespace CoalShortagePortal.WebApp.Controllers
 {
@@ -45,7 +46,8 @@ namespace CoalShortagePortal.WebApp.Controllers
             }
             // get the current logged in user
             IdentityUser usr = await GetCurrentUserAsync();
-            GenResponseVM vm = await PopulateVMForUserDate(usr.Id, entryDate);
+            bool usrIsAdmin = (await _userManager.GetRolesAsync(usr)).Any(r => r == SecurityConstants.AdminRoleString);
+            GenResponseVM vm = await PopulateVMForUserDate(usr.Id, usrIsAdmin, entryDate);
             return View(vm);
         }
 
@@ -66,7 +68,7 @@ namespace CoalShortagePortal.WebApp.Controllers
         }
 
         //helper function
-        private async Task<GenResponseVM> PopulateVMForUserDate(string userId, DateTime entryDate)
+        private async Task<GenResponseVM> PopulateVMForUserDate(string userId, bool usrIsAdmin, DateTime entryDate)
         {
             // generate view model for the user response based on the entryDate
             GenResponseVM vm = new GenResponseVM() { RecordDate = entryDate };
@@ -75,17 +77,17 @@ namespace CoalShortagePortal.WebApp.Controllers
             List<GeneratingStationForCoalShortage> coalShortageGens = await _context.GeneratingStationForCoalShortages
                                                             .Where(g => (g.StartDate <= entryDate) &&
                                                             (g.EndDate >= entryDate) &&
-                                                            (g.UserId == userId)).ToListAsync();
+                                                            ((g.UserId == userId) || usrIsAdmin)).ToListAsync();
             // get the other reason generators that user is assigned
             List<GeneratingStationForOtherReason> otherReasonGens = await _context.GeneratingStationForOtherReasons
                                                             .Where(g => (g.StartDate <= entryDate) &&
                                                             (g.EndDate >= entryDate) &&
-                                                            (g.UserId == userId)).ToListAsync();
+                                                            ((g.UserId == userId) || usrIsAdmin)).ToListAsync();
             // get the critical coal generators that user is assigned
             List<GeneratingStationForCriticalCoal> criticalCoalGens = await _context.GeneratingStationForCriticalCoals
                                                             .Where(g => (g.StartDate <= entryDate) &&
                                                             (g.EndDate >= entryDate) &&
-                                                            (g.UserId == userId)).ToListAsync();
+                                                            ((g.UserId == userId) || usrIsAdmin)).ToListAsync();
 
             // add coal shortage gens
             foreach (GeneratingStationForCoalShortage gen in coalShortageGens)
