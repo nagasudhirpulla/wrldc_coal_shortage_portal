@@ -73,6 +73,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                 }
                 else
                 {
+                    resp.DataDate = model.RecordDate;
                     _context.CoalShortageResponses.Add(resp);
                 }
                 _context.SaveChanges();
@@ -87,6 +88,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                 }
                 else
                 {
+                    resp.DataDate = model.RecordDate;
                     _context.OtherReasonsResponses.Add(resp);
                 }
                 _context.SaveChanges();
@@ -101,6 +103,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                 }
                 else
                 {
+                    resp.DataDate = model.RecordDate;
                     _context.CriticalCoalResponses.Add(resp);
                 }
                 _context.SaveChanges();
@@ -149,6 +152,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                         // If there is no existing response for gen, then add a new response
                         vm.CoalShortageResponses.Add(new CoalShortageResponse()
                         {
+                            DataDate = entryDate,
                             Station = gen.Name,
                             Location = gen.Location,
                             Agency = gen.Agency,
@@ -178,6 +182,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                         // If there is no existing response for gen, then add a new response
                         vm.OtherReasonsResponses.Add(new OtherReasonsResponse()
                         {
+                            DataDate = entryDate,
                             Station = gen.Name,
                             Location = gen.Location,
                             Agency = gen.Agency,
@@ -207,6 +212,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                         // If there is no existing response for gen, then add a new response
                         vm.CriticalCoalResponses.Add(new CriticalCoalResponse()
                         {
+                            DataDate = entryDate,
                             Station = gen.Name,
                             Owner = gen.Owner,
                             Capacity = gen.Capacity,

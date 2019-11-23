@@ -43,6 +43,8 @@
                             {
                                 <tr>
                                     <td>
+                                        <input asp-for="CoalShortageResponses[genIter].DataDate" type="hidden" class="form-control" />
+                                        <input asp-for="CoalShortageResponses[genIter].Id" type="hidden" class="form-control" />
                                         <input asp-for="CoalShortageResponses[genIter].Station" class="form-control" />
                                         <span asp-validation-for="CoalShortageResponses[genIter].Station" class="text-danger"></span>
                                     </td>
@@ -96,6 +98,8 @@
                             {
                                 <tr>
                                     <td>
+                                        <input asp-for="OtherReasonsResponses[genIter].Id" type="hidden" class="form-control" />
+                                        <input asp-for="OtherReasonsResponses[genIter].DataDate" type="hidden" class="form-control" />
                                         <input asp-for="OtherReasonsResponses[genIter].Station" class="form-control" />
                                         <span asp-validation-for="OtherReasonsResponses[genIter].Station" class="text-danger"></span>
                                     </td>
@@ -149,6 +153,8 @@
                             {
                                 <tr>
                                     <td>
+                                        <input asp-for="CriticalCoalResponses[genIter].Id" type="hidden" class="form-control" />
+                                        <input asp-for="CriticalCoalResponses[genIter].DataDate" type="hidden" class="form-control" />
                                         <input asp-for="CriticalCoalResponses[genIter].Station" class="form-control" />
                                         <span asp-validation-for="CriticalCoalResponses[genIter].Station" class="text-danger"></span>
                                     </td>
