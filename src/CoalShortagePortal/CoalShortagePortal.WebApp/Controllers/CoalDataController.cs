@@ -89,42 +89,90 @@ namespace CoalShortagePortal.WebApp.Controllers
                                                             (g.EndDate >= entryDate) &&
                                                             ((g.UserId == userId) || usrIsAdmin)).ToListAsync();
 
-            // add coal shortage gens
-            foreach (GeneratingStationForCoalShortage gen in coalShortageGens)
+            // fetch existing OtherReasonsResponses and initialize placeholder responses if any gens are assigned to the user
+            if (coalShortageGens.Count > 0)
             {
-                vm.CoalShortageResponses.Add(new CoalShortageResponse()
+                List<CoalShortageResponse> existingResponses = await _context.CoalShortageResponses.Where(r => r.DataDate == entryDate).ToListAsync();
+                // Add critical coal gen responses to VM
+                foreach (GeneratingStationForCoalShortage gen in coalShortageGens)
                 {
-                    Station = gen.Name,
-                    Location = gen.Location,
-                    Agency = gen.Agency,
-                    Capacity = gen.Capacity,
-                    Remarks = ""
-                });
+                    bool respExists = false;
+                    foreach (CoalShortageResponse resp in existingResponses.Where(r => (r.Station == gen.Name) && (r.Agency == gen.Agency)))
+                    {
+                        vm.CoalShortageResponses.Add(resp);
+                        respExists = true;
+                    }
+                    if (!respExists)
+                    {
+                        // If there is no existing response for gen, then add a new response
+                        vm.CoalShortageResponses.Add(new CoalShortageResponse()
+                        {
+                            Station = gen.Name,
+                            Location = gen.Location,
+                            Agency = gen.Agency,
+                            Capacity = gen.Capacity,
+                            Remarks = ""
+                        });
+                    }
+
+                }
             }
 
-            // add other reasons gens
-            foreach (GeneratingStationForOtherReason gen in otherReasonGens)
+            // fetch existing OtherReasonsResponses and initialize placeholder responses if any gens are assigned to the user
+            if (otherReasonGens.Count > 0)
             {
-                vm.OtherReasonsResponses.Add(new OtherReasonsResponse()
+                List<OtherReasonsResponse> existingResponses = await _context.OtherReasonsResponses.Where(r => r.DataDate == entryDate).ToListAsync();
+                // Add critical coal gen responses to VM
+                foreach (GeneratingStationForOtherReason gen in otherReasonGens)
                 {
-                    Station = gen.Name,
-                    Location = gen.Location,
-                    Agency = gen.Agency,
-                    Capacity = gen.Capacity,
-                    Remarks = ""
-                });
+                    bool respExists = false;
+                    foreach (OtherReasonsResponse resp in existingResponses.Where(r => (r.Station == gen.Name) && (r.Agency == gen.Agency)))
+                    {
+                        vm.OtherReasonsResponses.Add(resp);
+                        respExists = true;
+                    }
+                    if (!respExists)
+                    {
+                        // If there is no existing response for gen, then add a new response
+                        vm.OtherReasonsResponses.Add(new OtherReasonsResponse()
+                        {
+                            Station = gen.Name,
+                            Location = gen.Location,
+                            Agency = gen.Agency,
+                            Capacity = gen.Capacity,
+                            Remarks = ""
+                        });
+                    }
+
+                }
             }
 
-            // add critical coal gens
-            foreach (GeneratingStationForCriticalCoal gen in criticalCoalGens)
+            // fetch existing CriticalCoalResponses and initialize placeholder responses if any gens are assigned to the user
+            if (criticalCoalGens.Count > 0)
             {
-                vm.CriticalCoalResponses.Add(new CriticalCoalResponse()
+                List<CriticalCoalResponse> existingResponses = await _context.CriticalCoalResponses.Where(r => r.DataDate == entryDate).ToListAsync();
+                // Add critical coal gen responses to VM
+                foreach (GeneratingStationForCriticalCoal gen in criticalCoalGens)
                 {
-                    Station = gen.Name,
-                    Owner = gen.Owner,
-                    Capacity = gen.Capacity,
-                    Remarks = ""
-                });
+                    bool respExists = false;
+                    foreach (CriticalCoalResponse resp in existingResponses.Where(r => (r.Station == gen.Name) && (r.Owner == gen.Owner)))
+                    {
+                        vm.CriticalCoalResponses.Add(resp);
+                        respExists = true;
+                    }
+                    if (!respExists)
+                    {
+                        // If there is no existing response for gen, then add a new response
+                        vm.CriticalCoalResponses.Add(new CriticalCoalResponse()
+                        {
+                            Station = gen.Name,
+                            Owner = gen.Owner,
+                            Capacity = gen.Capacity,
+                            Remarks = ""
+                        });
+                    }
+
+                }
             }
 
             return vm;

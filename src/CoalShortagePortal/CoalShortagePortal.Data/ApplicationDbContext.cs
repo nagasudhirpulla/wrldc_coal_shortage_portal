@@ -19,7 +19,7 @@ namespace CoalShortagePortal.Data
         public DbSet<GeneratingStationForCriticalCoal> GeneratingStationForCriticalCoals { get; set; }
         public DbSet<GeneratingStationForOtherReason> GeneratingStationForOtherReasons { get; set; }
         public DbSet<CoalShortageResponse> CoalShortageResponses { get; set; }
-        public DbSet<OtherReasonsResponse> OtherReasonsResponse { get; set; }
+        public DbSet<OtherReasonsResponse> OtherReasonsResponses { get; set; }
         public DbSet<CriticalCoalResponse> CriticalCoalResponses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
