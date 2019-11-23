@@ -1,7 +1,13 @@
 ﻿@model CoalShortagePortal.WebApp.Models.GenResponseVM
+@using CoalShortagePortal.Core
 @using CoalShortagePortal.Core.Entities
 @{
     ViewData["Title"] = "Coal Shortage and Critical coal Data";
+    bool isNotAdmin = true;
+    if (User.IsInRole(SecurityConstants.AdminRoleString))
+    {
+        isNotAdmin = false;
+    }
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -45,19 +51,19 @@
                                     <td>
                                         <input asp-for="CoalShortageResponses[genIter].DataDate" type="hidden" class="form-control" />
                                         <input asp-for="CoalShortageResponses[genIter].Id" type="hidden" class="form-control" />
-                                        <input asp-for="CoalShortageResponses[genIter].Station" class="form-control" />
+                                        <input asp-for="CoalShortageResponses[genIter].Station" class="form-control" readonly="@isNotAdmin" />
                                         <span asp-validation-for="CoalShortageResponses[genIter].Station" class="text-danger"></span>
                                     </td>
                                     <td>
-                                        <input asp-for="CoalShortageResponses[genIter].Location" class="form-control" />
+                                        <input asp-for="CoalShortageResponses[genIter].Location" class="form-control" readonly="@isNotAdmin" />
                                         <span asp-validation-for="CoalShortageResponses[genIter].Location" class="text-danger"></span>
                                     </td>
                                     <td>
-                                        <input asp-for="CoalShortageResponses[genIter].Agency" class="form-control" />
+                                        <input asp-for="CoalShortageResponses[genIter].Agency" class="form-control" readonly="@isNotAdmin" />
                                         <span asp-validation-for="CoalShortageResponses[genIter].Agency" class="text-danger"></span>
                                     </td>
                                     <td>
-                                        <input asp-for="CoalShortageResponses[genIter].Capacity" class="form-control" />
+                                        <input asp-for="CoalShortageResponses[genIter].Capacity" class="form-control" readonly="@isNotAdmin" />
                                         <span asp-validation-for="CoalShortageResponses[genIter].Capacity" class="text-danger"></span>
                                     </td>
                                     <td>
@@ -100,19 +106,19 @@
                                     <td>
                                         <input asp-for="OtherReasonsResponses[genIter].Id" type="hidden" class="form-control" />
                                         <input asp-for="OtherReasonsResponses[genIter].DataDate" type="hidden" class="form-control" />
-                                        <input asp-for="OtherReasonsResponses[genIter].Station" class="form-control" />
+                                        <input asp-for="OtherReasonsResponses[genIter].Station" class="form-control" readonly="@isNotAdmin" />
                                         <span asp-validation-for="OtherReasonsResponses[genIter].Station" class="text-danger"></span>
                                     </td>
                                     <td>
-                                        <input asp-for="OtherReasonsResponses[genIter].Location" class="form-control" />
+                                        <input asp-for="OtherReasonsResponses[genIter].Location" class="form-control" readonly="@isNotAdmin" />
                                         <span asp-validation-for="OtherReasonsResponses[genIter].Location" class="text-danger"></span>
                                     </td>
                                     <td>
-                                        <input asp-for="OtherReasonsResponses[genIter].Agency" class="form-control" />
+                                        <input asp-for="OtherReasonsResponses[genIter].Agency" class="form-control" readonly="@isNotAdmin" />
                                         <span asp-validation-for="OtherReasonsResponses[genIter].Agency" class="text-danger"></span>
                                     </td>
                                     <td>
-                                        <input asp-for="OtherReasonsResponses[genIter].Capacity" class="form-control" />
+                                        <input asp-for="OtherReasonsResponses[genIter].Capacity" class="form-control" readonly="@isNotAdmin" />
                                         <span asp-validation-for="OtherReasonsResponses[genIter].Capacity" class="text-danger"></span>
                                     </td>
                                     <td>
@@ -155,15 +161,15 @@
                                     <td>
                                         <input asp-for="CriticalCoalResponses[genIter].Id" type="hidden" class="form-control" />
                                         <input asp-for="CriticalCoalResponses[genIter].DataDate" type="hidden" class="form-control" />
-                                        <input asp-for="CriticalCoalResponses[genIter].Station" class="form-control" />
+                                        <input asp-for="CriticalCoalResponses[genIter].Station" class="form-control" readonly="@isNotAdmin" />
                                         <span asp-validation-for="CriticalCoalResponses[genIter].Station" class="text-danger"></span>
                                     </td>
                                     <td>
-                                        <input asp-for="CriticalCoalResponses[genIter].Owner" class="form-control" />
+                                        <input asp-for="CriticalCoalResponses[genIter].Owner" class="form-control" readonly="@isNotAdmin" />
                                         <span asp-validation-for="CriticalCoalResponses[genIter].Owner" class="text-danger"></span>
                                     </td>
                                     <td>
-                                        <input asp-for="CriticalCoalResponses[genIter].Capacity" class="form-control" />
+                                        <input asp-for="CriticalCoalResponses[genIter].Capacity" class="form-control" readonly="@isNotAdmin" />
                                         <span asp-validation-for="CriticalCoalResponses[genIter].Capacity" class="text-danger"></span>
                                     </td>
                                     <td>

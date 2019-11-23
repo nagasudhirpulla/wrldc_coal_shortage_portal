@@ -142,7 +142,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                 foreach (GeneratingStationForCoalShortage gen in coalShortageGens)
                 {
                     bool respExists = false;
-                    foreach (CoalShortageResponse resp in existingResponses.Where(r => (r.Station == gen.Name) && (r.Agency == gen.Agency)))
+                    foreach (CoalShortageResponse resp in existingResponses.Where(r => r.Station == gen.Name))
                     {
                         vm.CoalShortageResponses.Add(resp);
                         respExists = true;
@@ -172,7 +172,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                 foreach (GeneratingStationForOtherReason gen in otherReasonGens)
                 {
                     bool respExists = false;
-                    foreach (OtherReasonsResponse resp in existingResponses.Where(r => (r.Station == gen.Name) && (r.Agency == gen.Agency)))
+                    foreach (OtherReasonsResponse resp in existingResponses.Where(r => r.Station == gen.Name))
                     {
                         vm.OtherReasonsResponses.Add(resp);
                         respExists = true;
@@ -202,7 +202,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                 foreach (GeneratingStationForCriticalCoal gen in criticalCoalGens)
                 {
                     bool respExists = false;
-                    foreach (CriticalCoalResponse resp in existingResponses.Where(r => (r.Station == gen.Name) && (r.Owner == gen.Owner)))
+                    foreach (CriticalCoalResponse resp in existingResponses.Where(r => r.Station == gen.Name))
                     {
                         vm.CriticalCoalResponses.Add(resp);
                         respExists = true;
