@@ -55,7 +55,7 @@ namespace CoalShortagePortal.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Populate([Bind("RecordDate")]GenResponseVM model)
         {
-            return RedirectToAction(nameof(Index), model);
+            return RedirectToAction(nameof(Index), new { model.RecordDate });
         }
 
         [HttpPost]
@@ -63,8 +63,50 @@ namespace CoalShortagePortal.WebApp.Controllers
         public IActionResult Index(GenResponseVM model)
         {
             // save the model data to db
-
-            return RedirectToAction(nameof(Index), model);
+            // save CoalShortageResponses
+            foreach (CoalShortageResponse resp in model.CoalShortageResponses)
+            {
+                // check if resp is to be added or inserted
+                if (resp.Id != 0)
+                {
+                    _context.Update(resp);
+                }
+                else
+                {
+                    _context.CoalShortageResponses.Add(resp);
+                }
+                _context.SaveChanges();
+            }
+            // save OtherReasonsResponses
+            foreach (OtherReasonsResponse resp in model.OtherReasonsResponses)
+            {
+                // check if resp is to be added or inserted
+                if (resp.Id != 0)
+                {
+                    _context.Update(resp);
+                }
+                else
+                {
+                    _context.OtherReasonsResponses.Add(resp);
+                }
+                _context.SaveChanges();
+            }
+            // save CriticalCoalResponses
+            foreach (CriticalCoalResponse resp in model.CriticalCoalResponses)
+            {
+                // check if resp is to be added or inserted
+                if (resp.Id != 0)
+                {
+                    _context.Update(resp);
+                }
+                else
+                {
+                    _context.CriticalCoalResponses.Add(resp);
+                }
+                _context.SaveChanges();
+            }
+            // redirect to the same page
+            return RedirectToAction(nameof(Index), new { model.RecordDate });
         }
 
         //helper function
