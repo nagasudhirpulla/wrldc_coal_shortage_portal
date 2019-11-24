@@ -47,7 +47,7 @@
                         <tbody>
                             @for (int genIter = 0; genIter < Model.CoalShortageResponses.Count; genIter++)
                             {
-                                <tr>
+                                <tr @{if (Model.CoalShortageResponses[genIter].Id == 0) { <text> class="placeholder_response" </text>  } }>
                                     <td>
                                         <input asp-for="CoalShortageResponses[genIter].DataDate" type="hidden" class="form-control" />
                                         <input asp-for="CoalShortageResponses[genIter].Id" type="hidden" class="form-control" />
@@ -102,7 +102,7 @@
                         <tbody>
                             @for (int genIter = 0; genIter < Model.OtherReasonsResponses.Count; genIter++)
                             {
-                                <tr>
+                                <tr @{if (Model.OtherReasonsResponses[genIter].Id == 0) { <text> class="placeholder_response" </text>  } }>
                                     <td>
                                         <input asp-for="OtherReasonsResponses[genIter].Id" type="hidden" class="form-control" />
                                         <input asp-for="OtherReasonsResponses[genIter].DataDate" type="hidden" class="form-control" />
@@ -157,7 +157,7 @@
                         <tbody>
                             @for (int genIter = 0; genIter < Model.CriticalCoalResponses.Count; genIter++)
                             {
-                                <tr>
+                                <tr @{if (Model.CriticalCoalResponses[genIter].Id == 0) { <text> class="placeholder_response" </text>  } }>
                                     <td>
                                         <input asp-for="CriticalCoalResponses[genIter].Id" type="hidden" class="form-control" />
                                         <input asp-for="CriticalCoalResponses[genIter].DataDate" type="hidden" class="form-control" />
@@ -203,3 +203,10 @@
 
 }
 
+@section Scripts{
+    <style>
+        tr.placeholder_response {
+            background-color: #0f03;
+        }
+    </style>
+}
