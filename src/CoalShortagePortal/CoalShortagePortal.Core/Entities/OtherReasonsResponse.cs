@@ -18,7 +18,6 @@ namespace CoalShortagePortal.Core.Entities
         public double Capacity { get; set; }
         public double PrevDayAvgMw { get; set; }
         public double GenLossMw { get; set; }
-        [Required]
         public string Remarks { get; set; }
     }
 }

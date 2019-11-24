@@ -3,15 +3,17 @@ using System;
 using CoalShortagePortal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace CoalShortagePortal.WebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191124144848_nullableRemarks")]
+    partial class nullableRemarks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,7 +49,9 @@ namespace CoalShortagePortal.WebApp.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<string>("Remarks")
-                        .HasColumnType("text");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("");
 
                     b.Property<string>("Station")
                         .IsRequired()
@@ -88,7 +92,9 @@ namespace CoalShortagePortal.WebApp.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<string>("Remarks")
-                        .HasColumnType("text");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("");
 
                     b.Property<string>("Station")
                         .IsRequired()
@@ -137,12 +143,6 @@ namespace CoalShortagePortal.WebApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("EndDate", "Name")
-                        .IsUnique();
-
-                    b.HasIndex("StartDate", "Name")
-                        .IsUnique();
-
                     b.ToTable("GeneratingStationForCoalShortages");
                 });
 
@@ -176,12 +176,6 @@ namespace CoalShortagePortal.WebApp.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("EndDate", "Name")
-                        .IsUnique();
-
-                    b.HasIndex("StartDate", "Name")
-                        .IsUnique();
 
                     b.ToTable("GeneratingStationForCriticalCoals");
                 });
@@ -221,12 +215,6 @@ namespace CoalShortagePortal.WebApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("EndDate", "Name")
-                        .IsUnique();
-
-                    b.HasIndex("StartDate", "Name")
-                        .IsUnique();
-
                     b.ToTable("GeneratingStationForOtherReasons");
                 });
 
@@ -258,7 +246,9 @@ namespace CoalShortagePortal.WebApp.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<string>("Remarks")
-                        .HasColumnType("text");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("");
 
                     b.Property<string>("Station")
                         .IsRequired()

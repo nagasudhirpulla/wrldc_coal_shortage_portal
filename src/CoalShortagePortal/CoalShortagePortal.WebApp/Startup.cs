@@ -49,7 +49,9 @@ namespace CoalShortagePortal.WebApp
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 
-            services.AddControllersWithViews();
+            services
+                .AddControllersWithViews()
+                .AddRazorRuntimeCompilation();
             services.AddRazorPages();
         }
 

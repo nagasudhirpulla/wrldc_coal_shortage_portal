@@ -11,11 +11,6 @@ namespace CoalShortagePortal.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<CoalShortageResponse> builder)
         {
-            // Default value for remarks column
-            builder
-            .Property(b => b.Remarks)
-            .HasDefaultValue("");
-
             builder
             .HasIndex(b => new { b.DataDate, b.Station })
             .IsUnique();

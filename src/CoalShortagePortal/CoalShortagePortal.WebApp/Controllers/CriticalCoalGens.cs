@@ -64,6 +64,20 @@ namespace CoalShortagePortal.WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                // handle start > end date
+                if (vm.StartDate > vm.EndDate)
+                {
+                    //todo use custom exception for start > end date
+                    throw new Exception("Start Date not be greater than end date");
+                }
+
+                // perform overlap check for the generator name before insertion
+                if (await CheckIfOverlapExists(vm.StartDate, vm.Name))
+                {
+                    // todo use custom exception for this
+                    throw new Exception($"An overlapping entry exists for {vm.Name}, hence we are unable to create this generator for these {vm.StartDate.ToString("dd-MMM-yyyy")} and {vm.EndDate.ToString("dd-MMM-yyyy")} dates");
+                }
+
                 GeneratingStationForCriticalCoal gen = new GeneratingStationForCriticalCoal
                 {
                     StartDate = vm.StartDate,
@@ -74,9 +88,10 @@ namespace CoalShortagePortal.WebApp.Controllers
                     UserId = vm.UserId
                 };
                 _context.Add(gen);
-                int x = await _context.SaveChangesAsync();
 
-                if (x == 1)
+                int numInserted = await _context.SaveChangesAsync();
+
+                if (numInserted == 1)
                 {
                     _logger.LogInformation("Generator for Critical Coal created");
 
@@ -84,7 +99,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                 }
                 else
                 {
-                    string msg = $"Generator for Critical Coal not created as db returned num insertions as {x}";
+                    string msg = $"Generator for Critical Coal not created as db returned num insertions as {numInserted}";
                     _logger.LogInformation(msg);
                     //todo create custom exception
                     throw new Exception(msg);
@@ -106,13 +121,6 @@ namespace CoalShortagePortal.WebApp.Controllers
             if (gen == null)
             {
                 return NotFound();
-            }
-
-            //todo handle user not present as custom exception
-            //todo handle start > end date as custom exception
-            if (gen.StartDate > gen.EndDate)
-            {
-                throw new Exception("Start Date not be greater than end date");
             }
 
             GenCriticalCoalCreateVM vm = new GenCriticalCoalCreateVM()
@@ -140,13 +148,21 @@ namespace CoalShortagePortal.WebApp.Controllers
                     return NotFound();
                 }
 
-                //todo handle start > end date as custom exception
-                if (gen.StartDate > gen.EndDate)
+                // handle start > end date
+                if (vm.StartDate > vm.EndDate)
                 {
+                    //todo use custom exception for start > end date
                     throw new Exception("Start Date not be greater than end date");
                 }
 
-                // update shift object as per user changes
+                // perform overlap check for the generator name before insertion
+                if (await CheckIfOverlapExists(vm.StartDate, vm.Name))
+                {
+                    // todo use custom exception for this
+                    throw new Exception($"An overlapping entry exists for {vm.Name}, hence we are unable to edit this generator for these {vm.StartDate.ToString("dd-MMM-yyyy")} and {vm.EndDate.ToString("dd-MMM-yyyy")} dates");
+                }
+
+                // update object as per user changes
                 gen.StartDate = vm.StartDate;
                 gen.EndDate = vm.EndDate;
                 gen.Name = vm.Name;
@@ -161,7 +177,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    // check if the shift we are trying to edit was already deleted due to concurrency
+                    // check if the we are trying to edit was already deleted due to concurrency
                     if (!_context.GeneratingStationForCriticalCoals.Any(g => g.Id == id))
                     {
                         return NotFound();
@@ -217,6 +233,14 @@ namespace CoalShortagePortal.WebApp.Controllers
             _context.GeneratingStationForCriticalCoals.Remove(gen);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        private async Task<bool> CheckIfOverlapExists(DateTime StartDate, string stationName)
+        {
+            // perform overlap check for the generator name before insertion
+            bool overlapEntryExists = await _context.GeneratingStationForCriticalCoals.AnyAsync(x => (x.StartDate <= StartDate) && (x.EndDate >= StartDate) && (x.Name == stationName));
+
+            return overlapEntryExists;
         }
     }
 }
