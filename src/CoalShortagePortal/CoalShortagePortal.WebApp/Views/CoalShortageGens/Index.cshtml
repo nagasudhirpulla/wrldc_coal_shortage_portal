@@ -24,7 +24,7 @@
         <tbody>
             @foreach (var gen in Model.Gens)
             {
-                <tr>
+                <tr @{if (gen.EndDate.Date < DateTime.Now.Date) { <text> class="stale_gen_row" </text>  } }>
                     <td>@gen.StartDate.ToString("dd-MMM-yyyy")</td>
                     <td>@gen.EndDate.ToString("dd-MMM-yyyy")</td>
                     <td>@gen.Name</td>
@@ -47,3 +47,7 @@
     </p>
 }
 
+
+@section Scripts{
+    <link rel="stylesheet" href="@Url.Content("~/css/stale_gens.css")">
+}
