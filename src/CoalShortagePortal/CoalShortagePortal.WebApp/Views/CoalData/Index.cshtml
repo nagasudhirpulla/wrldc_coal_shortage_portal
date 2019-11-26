@@ -10,19 +10,16 @@
     }
 }
 
-<h2>@ViewData["Title"]</h2>
-
 @if (Model != null)
 {
-    <div class="row">
-        <div class="col-md-12">
-            <form method="post" asp-action="Populate">
-                <input type="date" class="form-control" value="@Model.RecordDate.ToString("yyyy-MM-dd")" name="RecordDate" />
-                <span asp-validation-for="RecordDate" class="text-danger"></span>
-                <button type="submit" class="btn btn-success">Show For Date</button>
-            </form>
+    <form class="form-inline">
+        <div class="form-group mb-2">
+            <label for="RecordDate" style="margin-right:8px"><b>Date</b></label>
+            <input type="date" class="form-control" value="@Model.RecordDate.ToString("yyyy-MM-dd")" name="RecordDate">
+            <span asp-validation-for="RecordDate" class="text-danger"></span>
         </div>
-    </div>
+        <button style="margin-left:8px" type="submit" class="btn btn-primary mb-2">Submit</button>
+    </form>
     <div class="row">
         <div class="col-md-12">
             <form method="post" asp-action="Index">
@@ -31,9 +28,11 @@
                 <div asp-validation-summary="All" class="text-danger"></div>
                 @if (Model.CoalShortageResponses.Count > 0)
                 {
-                    <h2>Generation loss due to coal shortage for date @Model.RecordDate.ToString("dd-MMM-yyyy")</h2>
-                    <table class="table table-bordered table-hover">
-                        <thead>
+                    <div class="text-center">
+                        <h2>Generation loss due to coal shortage on @Model.RecordDate.ToString("dd-MMM-yyyy")</h2>
+                    </div>
+                    <table class="table table-bordered table-hover" id="coal_entry_table">
+                        <thead class="coal_table_header">
                             <tr>
                                 <td>Station</td>
                                 <td>Location</td>
@@ -86,9 +85,11 @@
                 @if (Model.OtherReasonsResponses.Count > 0)
                 {
                     <hr />
-                    <h2>Generation loss due to other reasons for date @Model.RecordDate.ToString("dd-MMM-yyyy")</h2>
-                    <table class="table table-bordered table-hover">
-                        <thead>
+                    <div class="text-center">
+                        <h2>Generation loss due to other reasons on @Model.RecordDate.ToString("dd-MMM-yyyy")</h2>
+                    </div>
+                    <table class="table table-bordered table-hover" id="other_entry_table">
+                        <thead class="other_table_header">
                             <tr>
                                 <td>Station</td>
                                 <td>Location</td>
@@ -141,9 +142,11 @@
                 @if (Model.CriticalCoalResponses.Count > 0)
                 {
                     <hr />
-                    <h2>Critical Coal Stock for date @Model.RecordDate.ToString("dd-MMM-yyyy")</h2>
-                    <table class="table table-bordered table-hover">
-                        <thead>
+                    <div class="text-center">
+                        <h2>Critical Coal Stock on @Model.RecordDate.ToString("dd-MMM-yyyy")</h2>
+                    </div>
+                    <table class="table table-bordered table-hover" id="critical_entry_table">
+                        <thead class="critical_table_header">
                             <tr>
                                 <td>Station</td>
                                 <td>Owner</td>
@@ -204,9 +207,32 @@
 }
 
 @section Scripts{
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/fc-3.2.5/fh-3.1.4/r-2.2.2/datatables.min.css" />
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/fc-3.2.5/fh-3.1.4/r-2.2.2/datatables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
+    <script src="~/js/coal_data_entry.js"></script>
     <style>
-        tr.placeholder_response {
+        table tbody tr.placeholder_response {
             background-color: #0f03;
+        }
+
+        thead.coal_table_header {
+            background-color: #ed553b;
+        }
+
+        thead.other_table_header {
+            background-color: #f6d55c;
+        }
+
+        thead.critical_table_header {
+            background-color: #3caea3;
         }
     </style>
 }
