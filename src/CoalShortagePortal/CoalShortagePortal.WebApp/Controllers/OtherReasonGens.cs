@@ -39,6 +39,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                     Id = g.Id,
                     StartDate = g.StartDate,
                     EndDate = g.EndDate,
+                    SerialNum = g.SerialNum,
                     Name = g.Name,
                     Location = g.Location,
                     Agency = g.Agency,
@@ -83,6 +84,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                 {
                     StartDate = vm.StartDate,
                     EndDate = vm.EndDate,
+                    SerialNum = vm.SerialNum,
                     Name = vm.Name,
                     Location = vm.Location,
                     Agency = vm.Agency,
@@ -129,6 +131,7 @@ namespace CoalShortagePortal.WebApp.Controllers
             {
                 StartDate = gen.StartDate,
                 EndDate = gen.EndDate,
+                SerialNum = gen.SerialNum,
                 Name = gen.Name,
                 Location = gen.Location,
                 Agency = gen.Agency,
@@ -158,16 +161,21 @@ namespace CoalShortagePortal.WebApp.Controllers
                     throw new Exception("Start Date not be greater than end date");
                 }
 
-                // perform overlap check for the generator name before insertion
-                if (await CheckIfOverlapExists(vm.StartDate, vm.Name))
+                // perform overlap check only if name or startdate changes
+                if (vm.StartDate != gen.StartDate || vm.Name != gen.Name)
                 {
-                    // todo use custom exception for this
-                    throw new Exception($"An overlapping entry exists for {vm.Name}, hence we are unable to edit this generator for these {vm.StartDate.ToString("dd-MMM-yyyy")} and {vm.EndDate.ToString("dd-MMM-yyyy")} dates");
+                    // perform overlap check for the generator name before editing
+                    if (await CheckIfOverlapExists(vm.StartDate, vm.Name, id))
+                    {
+                        // todo use custom exception for this
+                        throw new Exception($"An overlapping entry exists for {vm.Name}, hence we are unable to edit this generator for these {vm.StartDate.ToString("dd-MMM-yyyy")} and {vm.EndDate.ToString("dd-MMM-yyyy")} dates");
+                    }
                 }
 
                 // update object as per user changes
                 gen.StartDate = vm.StartDate;
                 gen.EndDate = vm.EndDate;
+                gen.SerialNum = vm.SerialNum;
                 gen.Name = vm.Name;
                 gen.Location = vm.Location;
                 gen.Agency = vm.Agency;
@@ -216,6 +224,7 @@ namespace CoalShortagePortal.WebApp.Controllers
             {
                 StartDate = gen.StartDate,
                 EndDate = gen.EndDate,
+                SerialNum = gen.SerialNum,
                 Name = gen.Name,
                 Location = gen.Location,
                 Agency = gen.Agency,
@@ -240,10 +249,10 @@ namespace CoalShortagePortal.WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private async Task<bool> CheckIfOverlapExists(DateTime StartDate, string stationName)
+        private async Task<bool> CheckIfOverlapExists(DateTime StartDate, string stationName, int exclusionId = -1)
         {
             // perform overlap check for the generator name before insertion
-            bool overlapEntryExists = await _context.GeneratingStationForOtherReasons.AnyAsync(x => (x.StartDate <= StartDate) && (x.EndDate >= StartDate) && (x.Name == stationName));
+            bool overlapEntryExists = await _context.GeneratingStationForOtherReasons.AnyAsync(x => (x.Id != exclusionId) && (x.StartDate <= StartDate) && (x.EndDate >= StartDate) && (x.Name == stationName));
 
             return overlapEntryExists;
         }
