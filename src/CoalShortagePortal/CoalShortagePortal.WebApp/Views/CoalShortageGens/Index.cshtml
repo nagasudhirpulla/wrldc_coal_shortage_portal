@@ -11,6 +11,7 @@
     <table class="table table-bordered table-hover">
         <thead class="thead-light">
             <tr>
+                <th>S.No</th>
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Station</th>
@@ -25,6 +26,7 @@
             @foreach (var gen in Model.Gens)
             {
                 <tr @{if (gen.EndDate.Date < DateTime.Now.Date) { <text> class="stale_gen_row" </text>  } }>
+                    <td>@gen.SerialNum</td>
                     <td>@gen.StartDate.ToString("dd-MMM-yyyy")</td>
                     <td>@gen.EndDate.ToString("dd-MMM-yyyy")</td>
                     <td>@gen.Name</td>

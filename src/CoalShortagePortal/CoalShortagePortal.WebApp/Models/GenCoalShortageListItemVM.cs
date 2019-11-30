@@ -12,6 +12,9 @@ namespace CoalShortagePortal.WebApp.Models
         [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
 
+        [Display(Name = "Serial Number")]
+        public int SerialNum { get; set; }
+
         [Display(Name = "Station")]
         public string Name { get; set; }
         public string Location { get; set; }

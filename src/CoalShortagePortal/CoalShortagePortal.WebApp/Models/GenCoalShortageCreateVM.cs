@@ -12,6 +12,10 @@ namespace CoalShortagePortal.WebApp.Models
         public DateTime EndDate { get; set; }
 
         [Required]
+        [Display(Name = "Serial Number")]
+        public int SerialNum { get; set; }
+
+        [Required]
         [Display(Name = "Station")]
         public string Name { get; set; }
         [Required]

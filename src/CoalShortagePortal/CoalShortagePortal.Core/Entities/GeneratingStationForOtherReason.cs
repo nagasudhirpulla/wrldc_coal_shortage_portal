@@ -13,6 +13,8 @@ namespace CoalShortagePortal.Core.Entities
         [Column(TypeName = "date")]
         public DateTime EndDate { get; set; }
         [Required]
+        public int SerialNum { get; set; }
+        [Required]
         public string Name { get; set; }
         [Required]
         public string Location { get; set; }

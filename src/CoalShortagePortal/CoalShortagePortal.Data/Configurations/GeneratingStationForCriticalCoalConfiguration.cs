@@ -15,6 +15,10 @@ namespace CoalShortagePortal.Data.Configurations
             builder
             .HasIndex(b => new { b.EndDate, b.Name })
             .IsUnique();
+
+            builder
+            .Property(b => b.SerialNum)
+            .HasDefaultValue(1);
         }
     }
 }
