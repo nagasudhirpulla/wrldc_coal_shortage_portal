@@ -9,6 +9,8 @@ namespace CoalShortagePortal.Core.Entities
     {
         [Column(TypeName = "date")]
         public DateTime DataDate { get; set; }
+        [NotMapped]
+        public int SerialNum { get; set; }
         [Required]
         public string Station { get; set; }
         [Required]

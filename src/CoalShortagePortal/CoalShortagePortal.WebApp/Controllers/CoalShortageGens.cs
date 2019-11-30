@@ -34,7 +34,7 @@ namespace CoalShortagePortal.WebApp.Controllers
             GenCoalShortageListVM vm = new GenCoalShortageListVM
             {
                 // get the list of generators
-                Gens = await _context.GeneratingStationForCoalShortages.Select(g => new GenCoalShortageListItemVM()
+                Gens = await _context.GeneratingStationForCoalShortages.OrderBy(x => x.SerialNum).Select(g => new GenCoalShortageListItemVM()
                 {
                     Id = g.Id,
                     StartDate = g.StartDate,

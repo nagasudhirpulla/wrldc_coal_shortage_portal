@@ -144,6 +144,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                     bool respExists = false;
                     foreach (CoalShortageResponse resp in existingResponses.Where(r => r.Station == gen.Name))
                     {
+                        resp.SerialNum = gen.SerialNum;
                         vm.CoalShortageResponses.Add(resp);
                         respExists = true;
                     }
@@ -153,6 +154,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                         vm.CoalShortageResponses.Add(new CoalShortageResponse()
                         {
                             DataDate = entryDate,
+                            SerialNum = gen.SerialNum,
                             Station = gen.Name,
                             Location = gen.Location,
                             Agency = gen.Agency,
@@ -174,6 +176,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                     bool respExists = false;
                     foreach (OtherReasonsResponse resp in existingResponses.Where(r => r.Station == gen.Name))
                     {
+                        resp.SerialNum = gen.SerialNum;
                         vm.OtherReasonsResponses.Add(resp);
                         respExists = true;
                     }
@@ -183,6 +186,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                         vm.OtherReasonsResponses.Add(new OtherReasonsResponse()
                         {
                             DataDate = entryDate,
+                            SerialNum = gen.SerialNum,
                             Station = gen.Name,
                             Location = gen.Location,
                             Agency = gen.Agency,
@@ -204,6 +208,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                     bool respExists = false;
                     foreach (CriticalCoalResponse resp in existingResponses.Where(r => r.Station == gen.Name))
                     {
+                        resp.SerialNum = gen.SerialNum;
                         vm.CriticalCoalResponses.Add(resp);
                         respExists = true;
                     }
@@ -213,6 +218,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                         vm.CriticalCoalResponses.Add(new CriticalCoalResponse()
                         {
                             DataDate = entryDate,
+                            SerialNum = gen.SerialNum,
                             Station = gen.Name,
                             Owner = gen.Owner,
                             Capacity = gen.Capacity,

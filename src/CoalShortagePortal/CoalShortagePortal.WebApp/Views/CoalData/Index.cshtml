@@ -34,6 +34,7 @@
                     <table class="table table-bordered table-hover" id="coal_entry_table">
                         <thead class="coal_table_header">
                             <tr>
+                                <td>S.No</td>
                                 <td>Station</td>
                                 <td>Location</td>
                                 <td>Agency</td>
@@ -47,6 +48,9 @@
                             @for (int genIter = 0; genIter < Model.CoalShortageResponses.Count; genIter++)
                             {
                                 <tr @{if (Model.CoalShortageResponses[genIter].Id == 0) { <text> class="placeholder_response" </text>  } }>
+                                    <td>
+                                        @Model.CoalShortageResponses[genIter].SerialNum
+                                    </td>
                                     <td>
                                         <input asp-for="CoalShortageResponses[genIter].DataDate" type="hidden" class="form-control" />
                                         <input asp-for="CoalShortageResponses[genIter].Id" type="hidden" class="form-control" />
@@ -91,6 +95,7 @@
                     <table class="table table-bordered table-hover" id="other_entry_table">
                         <thead class="other_table_header">
                             <tr>
+                                <td>S.No</td>
                                 <td>Station</td>
                                 <td>Location</td>
                                 <td>Agency</td>
@@ -104,6 +109,9 @@
                             @for (int genIter = 0; genIter < Model.OtherReasonsResponses.Count; genIter++)
                             {
                                 <tr @{if (Model.OtherReasonsResponses[genIter].Id == 0) { <text> class="placeholder_response" </text>  } }>
+                                    <td>
+                                        @Model.OtherReasonsResponses[genIter].SerialNum
+                                    </td>
                                     <td>
                                         <input asp-for="OtherReasonsResponses[genIter].Id" type="hidden" class="form-control" />
                                         <input asp-for="OtherReasonsResponses[genIter].DataDate" type="hidden" class="form-control" />
@@ -148,6 +156,7 @@
                     <table class="table table-bordered table-hover" id="critical_entry_table">
                         <thead class="critical_table_header">
                             <tr>
+                                <td>S.No</td>
                                 <td>Station</td>
                                 <td>Owner</td>
                                 <td>Capacity</td>
@@ -161,6 +170,9 @@
                             @for (int genIter = 0; genIter < Model.CriticalCoalResponses.Count; genIter++)
                             {
                                 <tr @{if (Model.CriticalCoalResponses[genIter].Id == 0) { <text> class="placeholder_response" </text>  } }>
+                                    <td>
+                                        @Model.CriticalCoalResponses[genIter].SerialNum
+                                    </td>
                                     <td>
                                         <input asp-for="CriticalCoalResponses[genIter].Id" type="hidden" class="form-control" />
                                         <input asp-for="CriticalCoalResponses[genIter].DataDate" type="hidden" class="form-control" />
