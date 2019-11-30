@@ -42,7 +42,7 @@ namespace CoalShortagePortal.WebApp.Controllers
             }
             else
             {
-                entryDate = DateTime.Now.Date;
+                entryDate = DateTime.Now.Date.AddDays(-1);
             }
             // get the current logged in user
             IdentityUser usr = await GetCurrentUserAsync();
