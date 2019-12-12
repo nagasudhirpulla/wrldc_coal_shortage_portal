@@ -138,17 +138,30 @@ namespace CoalShortagePortal.WebApp.Controllers
             if (coalShortageGens.Count > 0)
             {
                 List<CoalShortageResponse> existingResponses = await _context.CoalShortageResponses.Where(r => r.DataDate == entryDate).ToListAsync();
+                List<CoalShortageResponse> yestResponses = await _context.CoalShortageResponses.Where(r => r.DataDate == entryDate.AddDays(-1)).ToListAsync();
                 // Add critical coal gen responses to VM
                 foreach (GeneratingStationForCoalShortage gen in coalShortageGens)
                 {
                     bool respExists = false;
+                    bool yestRespExists = false;
                     foreach (CoalShortageResponse resp in existingResponses.Where(r => r.Station == gen.Name))
                     {
                         resp.SerialNum = gen.SerialNum;
                         vm.CoalShortageResponses.Add(resp);
                         respExists = true;
                     }
-                    if (!respExists)
+                    if (usrIsAdmin && !respExists)
+                    {
+                        // populate yesterday data only if user is in admin role
+                        foreach (CoalShortageResponse resp in yestResponses.Where(r => r.Station == gen.Name))
+                        {
+                            resp.SerialNum = gen.SerialNum;
+                            resp.Id = 0;
+                            vm.CoalShortageResponses.Add(resp);
+                            yestRespExists = true;
+                        }
+                    }
+                    if (!respExists && !yestRespExists)
                     {
                         // If there is no existing response for gen, then add a new response
                         vm.CoalShortageResponses.Add(new CoalShortageResponse()
@@ -170,17 +183,30 @@ namespace CoalShortagePortal.WebApp.Controllers
             if (otherReasonGens.Count > 0)
             {
                 List<OtherReasonsResponse> existingResponses = await _context.OtherReasonsResponses.Where(r => r.DataDate == entryDate).ToListAsync();
+                List<OtherReasonsResponse> yestResponses = await _context.OtherReasonsResponses.Where(r => r.DataDate == entryDate.AddDays(-1)).ToListAsync();
                 // Add critical coal gen responses to VM
                 foreach (GeneratingStationForOtherReason gen in otherReasonGens)
                 {
                     bool respExists = false;
+                    bool yestRespExists = false;
                     foreach (OtherReasonsResponse resp in existingResponses.Where(r => r.Station == gen.Name))
                     {
                         resp.SerialNum = gen.SerialNum;
                         vm.OtherReasonsResponses.Add(resp);
                         respExists = true;
                     }
-                    if (!respExists)
+                    if (usrIsAdmin && !respExists)
+                    {
+                        // populate yesterday data only if user is in admin role
+                        foreach (OtherReasonsResponse resp in yestResponses.Where(r => r.Station == gen.Name))
+                        {
+                            resp.SerialNum = gen.SerialNum;
+                            resp.Id = 0;
+                            vm.OtherReasonsResponses.Add(resp);
+                            yestRespExists = true;
+                        }
+                    }
+                    if (!respExists && !yestRespExists)
                     {
                         // If there is no existing response for gen, then add a new response
                         vm.OtherReasonsResponses.Add(new OtherReasonsResponse()
@@ -202,17 +228,30 @@ namespace CoalShortagePortal.WebApp.Controllers
             if (criticalCoalGens.Count > 0)
             {
                 List<CriticalCoalResponse> existingResponses = await _context.CriticalCoalResponses.Where(r => r.DataDate == entryDate).ToListAsync();
+                List<CriticalCoalResponse> yestResponses = await _context.CriticalCoalResponses.Where(r => r.DataDate == entryDate.AddDays(-1)).ToListAsync();
                 // Add critical coal gen responses to VM
                 foreach (GeneratingStationForCriticalCoal gen in criticalCoalGens)
                 {
                     bool respExists = false;
+                    bool yestRespExists = false;
                     foreach (CriticalCoalResponse resp in existingResponses.Where(r => r.Station == gen.Name))
                     {
                         resp.SerialNum = gen.SerialNum;
                         vm.CriticalCoalResponses.Add(resp);
                         respExists = true;
                     }
-                    if (!respExists)
+                    if (usrIsAdmin && !respExists)
+                    {
+                        // populate yesterday data only if user is in admin role
+                        foreach (CriticalCoalResponse resp in yestResponses.Where(r => r.Station == gen.Name))
+                        {
+                            resp.SerialNum = gen.SerialNum;
+                            resp.Id = 0;
+                            vm.CriticalCoalResponses.Add(resp);
+                            yestRespExists = true;
+                        }
+                    }
+                    if (!respExists && !yestRespExists)
                     {
                         // If there is no existing response for gen, then add a new response
                         vm.CriticalCoalResponses.Add(new CriticalCoalResponse()
