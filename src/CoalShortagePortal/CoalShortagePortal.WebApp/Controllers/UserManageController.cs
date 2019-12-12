@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CoalShortagePortal.Core;
 using CoalShortagePortal.WebApp.Models;
+using CoalShortagePortal.WebApp.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -67,7 +68,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index)).WithSuccess("New user created");
                 }
                 AddErrors(result);
             }
@@ -166,7 +167,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                 {
                     _logger.LogInformation("User edit operation successful");
 
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index)).WithSuccess("User editing done"); ;
                 }
 
                 AddErrors(identityErrors);
@@ -216,7 +217,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                 {
                     _logger.LogInformation("User deleted successfully");
 
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index)).WithSuccess("User delete done"); ;
                 }
 
                 AddErrors(result);

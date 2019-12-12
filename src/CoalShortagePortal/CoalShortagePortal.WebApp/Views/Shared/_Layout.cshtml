@@ -27,6 +27,7 @@
     </header>
     <div class="container-fluid">
         <main role="main" class="pb-3">
+            <partial name="_StatusBaloonPartial" model=@TempData["StatusBaloon"] />
             @RenderBody()
         </main>
     </div>

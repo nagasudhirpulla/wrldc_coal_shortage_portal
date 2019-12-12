@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using CoalShortagePortal.Core.Entities;
 using System;
+using CoalShortagePortal.WebApp.Extensions;
 
 namespace CoalShortagePortal.WebApp.Controllers
 {
@@ -97,7 +98,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                 {
                     _logger.LogInformation("Generator for Critical Coal created");
 
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index)).WithSuccess("Generator for Critical Coal created");
                 }
                 else
                 {
@@ -195,7 +196,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index)).WithSuccess("Generator for Critical Coal editing done");
             }
 
             // If we got this far, something failed, redisplay form
@@ -241,7 +242,7 @@ namespace CoalShortagePortal.WebApp.Controllers
 
             _context.GeneratingStationForCriticalCoals.Remove(gen);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index)).WithSuccess("Generator for Critical Coal deleted");
         }
 
         private async Task<bool> CheckIfOverlapExists(DateTime StartDate, string stationName, int exclusionId = -1)

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using CoalShortagePortal.Core;
+using CoalShortagePortal.WebApp.Extensions;
 
 namespace CoalShortagePortal.WebApp.Controllers
 {
@@ -109,7 +110,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                 _context.SaveChanges();
             }
             // redirect to the same page
-            return RedirectToAction(nameof(Index), new { model.RecordDate });
+            return RedirectToAction(nameof(Index), new { model.RecordDate }).WithSuccess("Coal data saved");
         }
 
         //helper function
