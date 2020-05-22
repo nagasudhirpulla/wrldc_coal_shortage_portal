@@ -14,11 +14,10 @@
 {
     <form class="form-inline">
         <div class="form-group mb-2">
-            <label for="RecordDate" style="margin-right:8px"><b>Date</b></label>
             <input type="date" class="form-control" value="@Model.RecordDate.ToString("yyyy-MM-dd")" name="RecordDate">
             <span asp-validation-for="RecordDate" class="text-danger"></span>
         </div>
-        <button style="margin-left:8px" type="submit" class="btn btn-primary mb-2">Submit</button>
+        <button style="margin-left:8px" type="submit" class="btn btn-primary mb-2">Select Date</button>
     </form>
     <div class="row">
         <div class="col-md-12">
@@ -210,12 +209,21 @@
                 }
                 @if (Model.CoalShortageResponses.Count > 0 || Model.OtherReasonsResponses.Count > 0 || Model.CriticalCoalResponses.Count > 0)
                 {
-                    <button type="submit" class="btn btn-success">Submit</button>
+                    <button type="submit" class="btn btn-lg btn-success">Submit</button>
                 }
             </form>
         </div>
     </div>
-
+    <br/>
+    <div class="card bg-light">
+        <div class="card-body">
+            <h4>Notes</h4>
+            <ul>
+                <li>If a row is green, it means data not entered till now</li>
+                <li>Please enter data in all the input fields and press submit button</li>
+            </ul>
+        </div>
+    </div>
 }
 
 @section Scripts{

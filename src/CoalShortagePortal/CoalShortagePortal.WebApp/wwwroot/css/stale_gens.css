@@ -1,3 +1,7 @@
 ﻿tr.stale_gen_row {
     background-color: #f003;
 }
+
+tr.future_gen_row {
+    background-color: #e0bfff;
+}

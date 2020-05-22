@@ -2,6 +2,18 @@
 @model CoalShortagePortal.WebApp.Models.GenCriticalCoalListVM
 @{
     ViewData["Title"] = "Manage Critical Coal Generators";
+    string getGenClass(DateTime startDate, DateTime endDate)
+    {
+        if (endDate.Date < DateTime.Now.Date)
+        {
+            return "stale_gen_row";
+        }
+        else if (startDate.Date > DateTime.Now.Date)
+        {
+            return "future_gen_row";
+        }
+        return "";
+    }
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -24,7 +36,7 @@
         <tbody>
             @foreach (var gen in Model.Gens)
             {
-                <tr @{if (gen.EndDate.Date < DateTime.Now.Date) { <text> class="stale_gen_row" </text>  } }>
+                <tr class="@getGenClass(gen.StartDate, gen.EndDate)">
                     <td>@gen.SerialNum</td>
                     <td>@gen.StartDate.ToString("dd-MMM-yyyy")</td>
                     <td>@gen.EndDate.ToString("dd-MMM-yyyy")</td>
@@ -43,8 +55,18 @@
     </table>
     <br />
     <p>
-        <a asp-action="Create">Create New</a>
+        <a asp-action="Create" class="btn btn-lg btn-success">Create New</a>
     </p>
+    <br />
+    <div class="card bg-light">
+        <div class="card-body">
+            <h4>Notes</h4>
+            <ul>
+                <li>If a row is red, it means the generator is expired based on the "End Date" field</li>
+                <li>If a row is purple, it means the generator is not yet started based on the "Start Date" field</li>
+            </ul>
+        </div>
+    </div>
 }
 
 @section Scripts{

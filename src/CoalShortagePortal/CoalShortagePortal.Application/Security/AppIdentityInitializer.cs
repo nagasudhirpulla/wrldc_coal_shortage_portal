@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using CoalShortagePortal.Core.Interfaces.Security;
 using CoalShortagePortal.Core;
+using System;
 
 namespace CoalShortagePortal.Application.Security
 {
@@ -51,6 +52,17 @@ namespace CoalShortagePortal.Application.Security
                 if (result.Succeeded)
                 {
                     userManager.AddToRoleAsync(user, SecurityConstants.AdminRoleString).Wait();
+                    // verify user email
+                    string emailToken = (userManager.GenerateEmailConfirmationTokenAsync(user)).Result;
+                    IdentityResult emaiVerifiedResult = (userManager.ConfirmEmailAsync(user, emailToken)).Result;
+                    if (emaiVerifiedResult.Succeeded)
+                    {
+                        Console.WriteLine($"Email verified for new user {user.UserName} with id {user.Id} and email {user.Email}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Email verify failed for {user.UserName} with id {user.Id} and email {user.Email} due to errors {emaiVerifiedResult.Errors}");
+                    }
                 }
             }
         }

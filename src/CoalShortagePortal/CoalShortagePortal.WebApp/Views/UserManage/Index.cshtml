@@ -14,6 +14,7 @@
                     <tr>
                         <th>Username</th>
                         <th>Email</th>
+                        <th>Phone</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -23,6 +24,7 @@
                         <tr>
                             <td>@user.Username</td>
                             <td>@user.Email</td>
+                            <td>@user.Phone</td>
                             <td>
                                 <a asp-action="Edit" asp-route-id="@user.UserId">Edit</a> |
                                 <a asp-action="Delete" asp-route-id="@user.UserId">Delete</a>
@@ -34,7 +36,7 @@
             </table>
             <br />
             <p>
-                <a asp-action="Create">Create New</a>
+                <a asp-action="Create" class="btn btn-lg btn-success">Create New</a>
             </p>
         </div>
 

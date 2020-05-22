@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CoalShortagePortal.Application\CoalShortagePortal.Application.csproj" />
     <ProjectReference Include="..\CoalShortagePortal.Data\CoalShortagePortal.Data.csproj" />
+    <ProjectReference Include="..\CoalShortagePortal.Infrastructure\CoalShortagePortal.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

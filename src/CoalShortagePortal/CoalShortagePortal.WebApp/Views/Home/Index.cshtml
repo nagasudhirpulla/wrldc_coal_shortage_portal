@@ -1,8 +1,29 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+    <h2>Welcome</h2>
     <p>Please enter coal shortage related information in this portal for reporting purposes of WRLDC</p>
 </div>
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <div class="text-center">
+        <div>
+            <h1><a class="nav-link" asp-area="" asp-controller="CoalData" action="Index">Enter Coal Data</a></h1>
+            <br />
+            <br />
+            <h4><a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/ChangePassword">Manage Account</a></h4>
+        </div>
+    </div>
+}
+else
+{
+    <div class="text-center">
+        <h2><a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Login Here</a></h2>
+    </div>
+}

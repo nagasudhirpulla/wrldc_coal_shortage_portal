@@ -42,7 +42,8 @@ namespace CoalShortagePortal.WebApp.Controllers
                     {
                         UserId = user.Id,
                         Username = user.UserName,
-                        Email = user.Email
+                        Email = user.Email,
+                        Phone = user.PhoneNumber
                     });
                 }
 
@@ -67,6 +68,26 @@ namespace CoalShortagePortal.WebApp.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    // verify user email
+                    string emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    IdentityResult emaiVerifiedResult = await _userManager.ConfirmEmailAsync(user, emailToken);
+                    if (emaiVerifiedResult.Succeeded)
+                    {
+                        _logger.LogInformation($"Email verified for new user {user.UserName} with id {user.Id} and email {vm.Email}");
+                    }
+                    else
+                    {
+                        _logger.LogInformation($"Email verify failed for {user.UserName} with id {user.Id} and email {vm.Email} due to errors {emaiVerifiedResult.Errors}");
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(vm.PhoneNumber))
+                    {
+                        // verify phone number
+                        string phoneVerifyToken = await _userManager.GenerateChangePhoneNumberTokenAsync(user, vm.PhoneNumber);
+                        IdentityResult phoneVeifyResult = await _userManager.ChangePhoneNumberAsync(user, vm.PhoneNumber, phoneVerifyToken);
+                        _logger.LogInformation($"Phone verified new user {user.UserName} with id {user.Id} and phone {vm.PhoneNumber} = {phoneVeifyResult.Succeeded}");
+                    }
 
                     return RedirectToAction(nameof(Index)).WithSuccess("New user created");
                 }
@@ -94,7 +115,8 @@ namespace CoalShortagePortal.WebApp.Controllers
             UserEditVM vm = new UserEditVM()
             {
                 Email = user.Email,
-                Username = user.UserName
+                Username = user.UserName,
+                PhoneNumber = user.PhoneNumber
             };
             return View(vm);
         }
@@ -159,6 +181,21 @@ namespace CoalShortagePortal.WebApp.Controllers
                     else
                     {
                         identityErrors.AddRange(emailChangeResult.Errors);
+                    }
+                }
+
+                // check if phone number to be changed
+                if (user.PhoneNumber != vm.PhoneNumber)
+                {
+                    string phoneChangeToken = await _userManager.GenerateChangePhoneNumberTokenAsync(user, vm.PhoneNumber);
+                    IdentityResult phoneChangeResult = await _userManager.ChangePhoneNumberAsync(user, vm.PhoneNumber, phoneChangeToken);
+                    if (phoneChangeResult.Succeeded)
+                    {
+                        _logger.LogInformation($"phone number of user {user.UserName} with id {user.Id} changed to {vm.PhoneNumber}");
+                    }
+                    else
+                    {
+                        identityErrors.AddRange(phoneChangeResult.Errors);
                     }
                 }
 
