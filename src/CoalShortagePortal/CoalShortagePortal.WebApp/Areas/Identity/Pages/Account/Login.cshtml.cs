@@ -94,7 +94,7 @@ namespace CoalShortagePortal.WebApp.Areas.Identity.Pages.Account
             else
             {
                 //validate Username format
-                string usernameRegex = @"^[a-zA-Z0-9]*$";
+                string usernameRegex = @"^[a-zA-Z0-9_]*$";
                 Regex re = new Regex(usernameRegex);
                 if (!re.IsMatch(Input.Email))
                 {

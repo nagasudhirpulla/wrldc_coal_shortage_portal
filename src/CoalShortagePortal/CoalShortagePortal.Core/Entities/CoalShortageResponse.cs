@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CoalShortagePortal.Core.Entities
 {
-    public class CoalShortageResponse: BaseEntity, IAggregateRoot
+    public class CoalShortageResponse: AuditableEntity, IAggregateRoot
     {
         [Column(TypeName = "date")]
         public DateTime DataDate { get; set; }

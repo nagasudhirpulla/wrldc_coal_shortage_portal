@@ -3,15 +3,17 @@ using System;
 using CoalShortagePortal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace CoalShortagePortal.WebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200523072845_coal_shortage_auditable")]
+    partial class coal_shortage_auditable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,20 +92,8 @@ namespace CoalShortagePortal.WebApp.Migrations
                     b.Property<double>("CoalGenLossMw")
                         .HasColumnType("double precision");
 
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("CreatedById")
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("DataDate")
                         .HasColumnType("date");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("LastModifiedById")
-                        .HasColumnType("text");
 
                     b.Property<string>("Owner")
                         .IsRequired()
@@ -123,10 +113,6 @@ namespace CoalShortagePortal.WebApp.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("LastModifiedById");
 
                     b.HasIndex("DataDate", "Station")
                         .IsUnique();
@@ -291,23 +277,11 @@ namespace CoalShortagePortal.WebApp.Migrations
                     b.Property<double>("Capacity")
                         .HasColumnType("double precision");
 
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("CreatedById")
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("DataDate")
                         .HasColumnType("date");
 
                     b.Property<double>("GenLossMw")
                         .HasColumnType("double precision");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("LastModifiedById")
-                        .HasColumnType("text");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -324,10 +298,6 @@ namespace CoalShortagePortal.WebApp.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("LastModifiedById");
 
                     b.HasIndex("DataDate", "Station")
                         .IsUnique();
@@ -540,17 +510,6 @@ namespace CoalShortagePortal.WebApp.Migrations
                         .HasForeignKey("LastModifiedById");
                 });
 
-            modelBuilder.Entity("CoalShortagePortal.Core.Entities.CriticalCoalResponse", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "LastModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("LastModifiedById");
-                });
-
             modelBuilder.Entity("CoalShortagePortal.Core.Entities.GeneratingStationForCoalShortage", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
@@ -570,17 +529,6 @@ namespace CoalShortagePortal.WebApp.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("CoalShortagePortal.Core.Entities.OtherReasonsResponse", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "LastModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("LastModifiedById");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

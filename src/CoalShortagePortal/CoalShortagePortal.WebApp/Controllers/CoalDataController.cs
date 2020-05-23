@@ -61,7 +61,7 @@ namespace CoalShortagePortal.WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Index(GenResponseVM model)
+        public async Task<IActionResult> Index(GenResponseVM model)
         {
             // save the model data to db
             // save CoalShortageResponses
@@ -77,7 +77,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                     resp.DataDate = model.RecordDate;
                     _context.CoalShortageResponses.Add(resp);
                 }
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             // save OtherReasonsResponses
             foreach (OtherReasonsResponse resp in model.OtherReasonsResponses)
@@ -92,7 +92,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                     resp.DataDate = model.RecordDate;
                     _context.OtherReasonsResponses.Add(resp);
                 }
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             // save CriticalCoalResponses
             foreach (CriticalCoalResponse resp in model.CriticalCoalResponses)
@@ -107,7 +107,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                     resp.DataDate = model.RecordDate;
                     _context.CriticalCoalResponses.Add(resp);
                 }
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             // redirect to the same page
             return RedirectToAction(nameof(Index), new { model.RecordDate }).WithSuccess("Coal data saved");
