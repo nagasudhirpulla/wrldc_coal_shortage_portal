@@ -31,22 +31,41 @@
                         <h2>Generation loss due to coal shortage on @Model.RecordDate.ToString("dd-MMM-yyyy")</h2>
                     </div>
                     <table class="table table-bordered table-hover" id="coal_entry_table">
+                        <colgroup>
+                            <col span="1" style="width: 3%;">
+                            <col span="1" style="width: 15%;">
+                            <col span="1" style="width: 10%;">
+                            <col span="1" style="width: 10%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 37%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 5%;">
+                        </colgroup>
                         <thead class="coal_table_header">
                             <tr>
-                                <td>S.No</td>
-                                <td>Station</td>
-                                <td>Location</td>
-                                <td>Agency</td>
-                                <td>Capacity</td>
-                                <td>Previous Day Avg (MW)</td>
-                                <td>Generation Loss (MW)</td>
-                                <td>Remarks</td>
+                                <th>S.No</th>
+                                <th>Station</th>
+                                <th>Location</th>
+                                <th>Agency</th>
+                                <th>Capacity</th>
+                                <th>Previous Day Avg (MW)</th>
+                                <th>Generation Loss (MW)</th>
+                                <th>Remarks</th>
+                                <th>Created</th>
+                                <th>Updated</th>
                             </tr>
                         </thead>
                         <tbody>
                             @for (int genIter = 0; genIter < Model.CoalShortageResponses.Count; genIter++)
                             {
-                                <tr @{if (Model.CoalShortageResponses[genIter].Id == 0) { <text> class="placeholder_response" </text>  } }>
+                                bool isPlaceHolderResp = true;
+                                if (Model.CoalShortageResponses[genIter].Id != 0)
+                                {
+                                    isPlaceHolderResp = false;
+                                }
+                                <tr @{if (isPlaceHolderResp) { <text> class="placeholder_response" </text>  } }>
                                     <td>
                                         @Model.CoalShortageResponses[genIter].SerialNum
                                     </td>
@@ -80,6 +99,26 @@
                                         <textarea asp-for="CoalShortageResponses[genIter].Remarks" class="form-control"></textarea>
                                         <span asp-validation-for="CoalShortageResponses[genIter].Remarks" class="text-danger"></span>
                                     </td>
+                                    <td>
+                                        @{
+                                            string itemCreatedAt = "";
+                                            if (!isPlaceHolderResp && Model.CoalShortageResponses[genIter].Created.Year > 2000)
+                                            {
+                                                itemCreatedAt = @Model.CoalShortageResponses[genIter].Created.ToString("yyyy-MMM-dd HH:mm");
+                                            }
+                                        }
+                                        <span class="row_timestamp">@itemCreatedAt</span>
+                                    </td>
+                                    <td>
+                                        @{
+                                            string itemUpdatedAt = "";
+                                            if (!isPlaceHolderResp && Model.CoalShortageResponses[genIter].LastModified.HasValue && Model.CoalShortageResponses[genIter].LastModified.Value.Year > 2000)
+                                            {
+                                                itemUpdatedAt = @Model.CoalShortageResponses[genIter].LastModified.Value.ToString("yyyy-MMM-dd HH:mm");
+                                            }
+                                        }
+                                        <span class="row_timestamp">@itemUpdatedAt</span>
+                                    </td>
                                 </tr>
                             }
                         </tbody>
@@ -92,22 +131,41 @@
                         <h2>Generation loss due to other reasons on @Model.RecordDate.ToString("dd-MMM-yyyy")</h2>
                     </div>
                     <table class="table table-bordered table-hover" id="other_entry_table">
+                        <colgroup>
+                            <col span="1" style="width: 3%;">
+                            <col span="1" style="width: 15%;">
+                            <col span="1" style="width: 10%;">
+                            <col span="1" style="width: 10%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 37%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 5%;">
+                        </colgroup>
                         <thead class="other_table_header">
                             <tr>
-                                <td>S.No</td>
-                                <td>Station</td>
-                                <td>Location</td>
-                                <td>Agency</td>
-                                <td>Capacity</td>
-                                <td>Previous Day Avg (MW)</td>
-                                <td>Generation Loss (MW)</td>
-                                <td>Remarks</td>
+                                <th>S.No</th>
+                                <th>Station</th>
+                                <th>Location</th>
+                                <th>Agency</th>
+                                <th>Capacity</th>
+                                <th>Previous Day Avg (MW)</th>
+                                <th>Generation Loss (MW)</th>
+                                <th>Remarks</th>
+                                <th>Created</th>
+                                <th>Updated</th>
                             </tr>
                         </thead>
                         <tbody>
                             @for (int genIter = 0; genIter < Model.OtherReasonsResponses.Count; genIter++)
                             {
-                                <tr @{if (Model.OtherReasonsResponses[genIter].Id == 0) { <text> class="placeholder_response" </text>  } }>
+                                bool isPlaceHolderResp = true;
+                                if (Model.OtherReasonsResponses[genIter].Id != 0)
+                                {
+                                    isPlaceHolderResp = false;
+                                }
+                                <tr @{if (isPlaceHolderResp) { <text> class="placeholder_response" </text>  } }>
                                     <td>
                                         @Model.OtherReasonsResponses[genIter].SerialNum
                                     </td>
@@ -141,6 +199,26 @@
                                         <textarea asp-for="OtherReasonsResponses[genIter].Remarks" class="form-control"></textarea>
                                         <span asp-validation-for="OtherReasonsResponses[genIter].Remarks" class="text-danger"></span>
                                     </td>
+                                    <td>
+                                        @{
+                                            string itemCreatedAt = "";
+                                            if (!isPlaceHolderResp && Model.OtherReasonsResponses[genIter].Created.Year > 2000)
+                                            {
+                                                itemCreatedAt = @Model.OtherReasonsResponses[genIter].Created.ToString("yyyy-MMM-dd HH:mm");
+                                            }
+                                        }
+                                        <span class="row_timestamp">@itemCreatedAt</span>
+                                    </td>
+                                    <td>
+                                        @{
+                                            string itemUpdatedAt = "";
+                                            if (!isPlaceHolderResp && Model.OtherReasonsResponses[genIter].LastModified.HasValue && Model.OtherReasonsResponses[genIter].LastModified.Value.Year > 2000)
+                                            {
+                                                itemUpdatedAt = @Model.OtherReasonsResponses[genIter].LastModified.Value.ToString("yyyy-MMM-dd HH:mm");
+                                            }
+                                        }
+                                        <span class="row_timestamp">@itemUpdatedAt</span>
+                                    </td>
                                 </tr>
                             }
                         </tbody>
@@ -153,22 +231,41 @@
                         <h2>Critical Coal Stock on @Model.RecordDate.ToString("dd-MMM-yyyy")</h2>
                     </div>
                     <table class="table table-bordered table-hover" id="critical_entry_table">
+                        <colgroup>
+                            <col span="1" style="width: 3%;">
+                            <col span="1" style="width: 15%;">
+                            <col span="1" style="width: 10%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 42%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 5%;">
+                        </colgroup>
                         <thead class="critical_table_header">
                             <tr>
-                                <td>S.No</td>
-                                <td>Station</td>
-                                <td>Owner</td>
-                                <td>Capacity</td>
-                                <td>Present Generation (MW)</td>
-                                <td>Loss of Generation due to Coal Shortage (MW)</td>
-                                <td>Present Coal Stock (days)</td>
-                                <td>Remarks</td>
+                                <th>S.No</th>
+                                <th>Station</th>
+                                <th>Owner</th>
+                                <th>Capacity</th>
+                                <th>Present Generation (MW)</th>
+                                <th>Loss of Generation due to Coal Shortage (MW)</th>
+                                <th>Present Coal Stock (days)</th>
+                                <th>Remarks</th>
+                                <th>Created</th>
+                                <th>Updated</th>
                             </tr>
                         </thead>
                         <tbody>
                             @for (int genIter = 0; genIter < Model.CriticalCoalResponses.Count; genIter++)
                             {
-                                <tr @{if (Model.CriticalCoalResponses[genIter].Id == 0) { <text> class="placeholder_response" </text>  } }>
+                                bool isPlaceHolderResp = true;
+                                if (Model.CriticalCoalResponses[genIter].Id != 0)
+                                {
+                                    isPlaceHolderResp = false;
+                                }
+                                <tr @{if (isPlaceHolderResp) { <text> class="placeholder_response" </text>  } }>
                                     <td>
                                         @Model.CriticalCoalResponses[genIter].SerialNum
                                     </td>
@@ -202,6 +299,26 @@
                                         <textarea asp-for="CriticalCoalResponses[genIter].Remarks" class="form-control"></textarea>
                                         <span asp-validation-for="CriticalCoalResponses[genIter].Remarks" class="text-danger"></span>
                                     </td>
+                                    <td>
+                                        @{
+                                            string itemCreatedAt = "";
+                                            if (!isPlaceHolderResp && Model.CriticalCoalResponses[genIter].Created.Year > 2000)
+                                            {
+                                                itemCreatedAt = @Model.CriticalCoalResponses[genIter].Created.ToString("yyyy-MMM-dd HH:mm");
+                                            }
+                                        }
+                                        <span class="row_timestamp">@itemCreatedAt</span>
+                                    </td>
+                                    <td>
+                                        @{
+                                            string itemUpdatedAt = "";
+                                            if (!isPlaceHolderResp && Model.CriticalCoalResponses[genIter].LastModified.HasValue && Model.CriticalCoalResponses[genIter].LastModified.Value.Year > 2000)
+                                            {
+                                                itemUpdatedAt = @Model.CriticalCoalResponses[genIter].LastModified.Value.ToString("yyyy-MMM-dd HH:mm");
+                                            }
+                                        }
+                                        <span class="row_timestamp">@itemUpdatedAt</span>
+                                    </td>
                                 </tr>
                             }
                         </tbody>
@@ -214,7 +331,7 @@
             </form>
         </div>
     </div>
-    <br/>
+    <br />
     <div class="card bg-light">
         <div class="card-body">
             <h4>Notes</h4>
@@ -255,12 +372,23 @@
             background-color: #3caea3;
         }
 
-        textarea.form-control {
-            height: 3em;
+        th {
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle;
         }
 
-        .table tbody tr td{
+        textarea.form-control {
+            height: 5em;
+        }
+
+        .table tbody tr td {
             padding: 0;
+        }
+
+        .row_timestamp {
+            font-size: 1em;
+            color: #808080;
         }
     </style>
 }
