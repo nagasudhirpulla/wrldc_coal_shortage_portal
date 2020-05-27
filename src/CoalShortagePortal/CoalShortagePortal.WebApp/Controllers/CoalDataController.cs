@@ -63,6 +63,10 @@ namespace CoalShortagePortal.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(GenResponseVM model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
             // save the model data to db
             // save CoalShortageResponses
             foreach (CoalShortageResponse resp in model.CoalShortageResponses)
