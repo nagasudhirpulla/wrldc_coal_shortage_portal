@@ -1,0 +1,14 @@
+{
+  "name": "coal_shortage_portal_libs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nagasudhir Pulla",
+  "license": "ISC",
+  "dependencies": {
+    "plotly.js-cartesian-dist": "^1.54.1"
+  }
+}

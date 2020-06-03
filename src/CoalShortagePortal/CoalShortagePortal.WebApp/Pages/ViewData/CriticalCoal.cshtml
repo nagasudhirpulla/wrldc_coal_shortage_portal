@@ -1,0 +1,45 @@
+﻿@page
+@model CoalShortagePortal.WebApp.Pages.ViewData.CriticalCoalModel
+
+<h2>View Critical Coal Generators Data</h2>
+
+<form method="post">
+    <select asp-for="Generator" class="chosen-select mr-3" asp-items="ViewBag.Generator" style="width:16em"></select>
+    <input asp-for="StartDate" type="date" class="mr-3" />
+    <input asp-for="EndDate" type="date" class="mr-3" />
+    <button class="btn btn-success">View Data</button>
+</form>
+<hr />
+<div id='plotDiv'></div>
+
+@section Scripts{
+    @if ((Model.GenData.Timestamps != null) && (Model.GenData.Timestamps.Count > 0))
+    {
+        <script src='~/lib/node_modules/plotly.js-cartesian-dist/plotly-cartesian.js'></script>
+        <script type="text/javascript">
+            var timestamps = [@string.Join(",", Model.GenData.Timestamps.Select(t=>$"new Date({t.Subtract(new DateTime(1970,1,1,0,0,0,DateTimeKind.Utc)).TotalMilliseconds})"))];
+            var layout = {
+                legend: { "orientation": "h" },
+                title: 'Data',
+            };
+            @foreach (var item in Model.GenData.Data)
+            {
+            <text>
+            var trace = {
+                name:"@item.Key",
+                x: timestamps,
+                y: [@string.Join(",", Model.GenData.Data[@item.Key].Select(t=>$"{t}"))],
+                type: 'scatter'
+            };
+            var layout = {
+                legend: { "orientation": "h" },
+                title: '@item.Key of @Model.Generator from @Model.StartDate.ToString("dd-MMM-yyyy") to @Model.EndDate.ToString("dd-MMM-yyyy")',
+            };
+            var plotDiv = document.createElement('div');
+            document.getElementById('plotDiv').appendChild(plotDiv);
+            Plotly.newPlot(plotDiv, [trace], layout);
+            </text>
+            }
+        </script>
+    }
+}

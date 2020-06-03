@@ -25,6 +25,18 @@
                 <a class="nav-link text-dark" asp-area="" asp-controller="CriticalCoalGens" asp-action="Index">Critical Coal</a>
             </div>
         </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                View Data
+            </a>
+            <div class="dropdown-menu">
+                <a class="nav-link text-dark" asp-page="/ViewData/CoalShortage">Coal Shortage</a>
+                <hr />
+                <a class="nav-link text-dark" asp-page="/ViewData/OtherReasons">Other Reasons</a>
+                <hr />
+                <a class="nav-link text-dark" asp-page="/ViewData/CriticalCoal">Critical Coal</a>
+            </div>
+        </li>
     }
     <li class="nav-item">
         <a class="nav-link text-dark" asp-area="" asp-controller="CoalData" asp-action="Index">CoalData</a>
