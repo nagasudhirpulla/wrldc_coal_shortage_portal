@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using CoalShortagePortal.Core;
 using CoalShortagePortal.Core.Entities;
 using CoalShortagePortal.Data;
 using CoalShortagePortal.WebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CoalShortagePortal.WebApp.Pages.ViewData
 {
+    [Authorize(Roles = SecurityConstants.AdminRoleString)]
     public class CoalShortageModel : PageModel
     {
         [Required]
