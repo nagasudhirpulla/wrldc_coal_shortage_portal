@@ -21,6 +21,7 @@ namespace CoalShortagePortal.WebApp.Models
 
         [Display(Name = "Total Capacity (MW)")]
         public double Capacity { get; set; }
+        public string Region { get; set; }
 
         public string UserName { get; set; }
         public string UserId { get; set; }

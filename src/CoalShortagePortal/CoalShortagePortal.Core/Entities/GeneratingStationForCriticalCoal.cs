@@ -19,6 +19,8 @@ namespace CoalShortagePortal.Core.Entities
         [Required]
         public string Owner { get; set; }
         public double Capacity { get; set; }
+        [Required]
+        public RegionName Region { get; set; }
         public IdentityUser User { get; set; }
         public string UserId { get; set; }
     }

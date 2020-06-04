@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoalShortagePortal.Core.Entities;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace CoalShortagePortal.WebApp.Models
@@ -24,6 +25,9 @@ namespace CoalShortagePortal.WebApp.Models
         [Required]
         [Display(Name = "Total Capacity")]
         public double Capacity { get; set; }
+
+        [Required]
+        public RegionName Region{ get; set; }
 
         [Required]
         [Display(Name = "User")]

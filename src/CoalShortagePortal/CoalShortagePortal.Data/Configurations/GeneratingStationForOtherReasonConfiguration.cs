@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using CoalShortagePortal.Core.Entities;
+using System;
 
 namespace CoalShortagePortal.Data.Configurations
 {
@@ -19,6 +20,18 @@ namespace CoalShortagePortal.Data.Configurations
             builder
             .Property(b => b.SerialNum)
             .HasDefaultValue(1);
+
+            // region default value
+            builder
+            .Property(b => b.Region)
+            .HasDefaultValue(RegionName.WR);
+
+            // region enum store as string
+            builder
+            .Property(b => b.Region)
+            .HasConversion(
+            v => v.ToString(),
+            v => (RegionName)Enum.Parse(typeof(RegionName), v));
         }
     }
 }

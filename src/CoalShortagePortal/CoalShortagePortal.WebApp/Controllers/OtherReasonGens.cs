@@ -46,7 +46,8 @@ namespace CoalShortagePortal.WebApp.Controllers
                     Agency = g.Agency,
                     Capacity = g.Capacity,
                     UserId = g.User.Id,
-                    UserName = g.User.UserName
+                    UserName = g.User.UserName,
+                    Region = g.Region.ToString()
                 }).ToListAsync()
             };
 
@@ -90,6 +91,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                     Location = vm.Location,
                     Agency = vm.Agency,
                     Capacity = vm.Capacity,
+                    Region = vm.Region,
                     UserId = vm.UserId
                 };
                 _context.Add(gen);
@@ -136,6 +138,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                 Name = gen.Name,
                 Location = gen.Location,
                 Agency = gen.Agency,
+                Region = gen.Region,
                 Capacity = gen.Capacity,
                 UserId = gen.UserId
             };
@@ -182,6 +185,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                 gen.Agency = vm.Agency;
                 gen.Capacity = vm.Capacity;
                 gen.UserId = vm.UserId;
+                gen.Region = vm.Region;
 
                 try
                 {
@@ -230,7 +234,8 @@ namespace CoalShortagePortal.WebApp.Controllers
                 Location = gen.Location,
                 Agency = gen.Agency,
                 Capacity = gen.Capacity,
-                UserId = gen.UserId
+                UserId = gen.UserId,
+                Region = gen.Region
             };
             return View(vm);
         }
