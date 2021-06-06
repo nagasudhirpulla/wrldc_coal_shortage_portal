@@ -1,0 +1,403 @@
+﻿@model CoalShortagePortal.WebApp.Models.GenResponseVM
+@using CoalShortagePortal.Core
+@using CoalShortagePortal.Core.Entities
+@{
+    ViewData["Title"] = "Coal Shortage and Critical coal Data";
+    bool isNotAdmin = true;
+    if (User.IsInRole(SecurityConstants.AdminRoleString))
+    {
+        isNotAdmin = false;
+    }
+}
+
+@if (Model != null)
+{
+    <form class="form-inline">
+        <div class="form-group mb-2">
+            <input type="date" class="form-control" value="@Model.RecordDate.ToString("yyyy-MM-dd")" name="RecordDate">
+            <span asp-validation-for="RecordDate" class="text-danger"></span>
+        </div>
+        <button style="margin-left:8px" type="submit" class="btn btn-primary mb-2">Select Date</button>
+    </form>
+    <div class="row">
+        <div class="col-md-12">
+            <form method="post" asp-action="Index">
+                <input type="hidden" class="form-control" value="@Model.RecordDate" name="RecordDate" />
+                <hr />
+                <div asp-validation-summary="All" class="text-danger"></div>
+                @if (Model.CoalShortageResponses.Count > 0)
+                {
+                    <div class="text-center">
+                        <h2>Generation loss due to coal shortage on @Model.RecordDate.ToString("dd-MMM-yyyy")</h2>
+                    </div>
+                    <table class="table table-bordered table-hover" id="coal_entry_table">
+                        <colgroup>
+                            <col span="1" style="width: 3%;">
+                            <col span="1" style="width: 15%;">
+                            <col span="1" style="width: 10%;">
+                            <col span="1" style="width: 10%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 37%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 5%;">
+                        </colgroup>
+                        <thead class="coal_table_header">
+                            <tr>
+                                <th>S.No</th>
+                                <th>Station</th>
+                                <th>Location</th>
+                                <th>Agency</th>
+                                <th>Capacity</th>
+                                <th class="coal_prev_head">Previous Day Avg (MW)</th>
+                                <th class="coal_gen_loss_head">Generation Loss (MW)</th>
+                                <th class="coal_remarks_head">Remarks</th>
+                                <th>Created</th>
+                                <th>Updated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int genIter = 0; genIter < Model.CoalShortageResponses.Count; genIter++)
+                            {
+                                bool isPlaceHolderResp = true;
+                                if (Model.CoalShortageResponses[genIter].Id != 0)
+                                {
+                                    isPlaceHolderResp = false;
+                                }
+                                <tr @{if (isPlaceHolderResp) { <text> class="placeholder_response" </text>  } }>
+                                    <td>
+                                        @Model.CoalShortageResponses[genIter].SerialNum
+                                    </td>
+                                    <td>
+                                        <input asp-for="CoalShortageResponses[genIter].DataDate" type="hidden" class="form-control" />
+                                        <input asp-for="CoalShortageResponses[genIter].Id" type="hidden" class="form-control" />
+                                        <textarea asp-for="CoalShortageResponses[genIter].Station" class="form-control" readonly="@isNotAdmin"></textarea>
+                                        <span asp-validation-for="CoalShortageResponses[genIter].Station" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        <textarea asp-for="CoalShortageResponses[genIter].Location" class="form-control" readonly="@isNotAdmin"></textarea>
+                                        <span asp-validation-for="CoalShortageResponses[genIter].Location" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        <textarea asp-for="CoalShortageResponses[genIter].Agency" class="form-control" readonly="@isNotAdmin"></textarea>
+                                        <span asp-validation-for="CoalShortageResponses[genIter].Agency" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        <textarea asp-for="CoalShortageResponses[genIter].Capacity" class="form-control" readonly="@isNotAdmin"></textarea>
+                                        <span asp-validation-for="CoalShortageResponses[genIter].Capacity" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        <textarea asp-for="CoalShortageResponses[genIter].PrevDayAvgMw" class="form-control coal_shortage_prev"></textarea>
+                                        <span asp-validation-for="CoalShortageResponses[genIter].PrevDayAvgMw" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        <textarea asp-for="CoalShortageResponses[genIter].GenLossMw" class="form-control coal_shortage_loss"></textarea>
+                                        <span asp-validation-for="CoalShortageResponses[genIter].GenLossMw" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        <textarea asp-for="CoalShortageResponses[genIter].Remarks" class="form-control coal_shortage_remarks"></textarea>
+                                        <span asp-validation-for="CoalShortageResponses[genIter].Remarks" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        @{
+                                            string itemCreatedAt = "";
+                                            if (!isPlaceHolderResp && Model.CoalShortageResponses[genIter].Created.Year > 2000)
+                                            {
+                                                itemCreatedAt = @Model.CoalShortageResponses[genIter].Created.ToString("yyyy-MMM-dd HH:mm");
+                                            }
+                                        }
+                                        <span class="row_timestamp">@itemCreatedAt</span>
+                                    </td>
+                                    <td>
+                                        @{
+                                            string itemUpdatedAt = "";
+                                            if (!isPlaceHolderResp && Model.CoalShortageResponses[genIter].LastModified.HasValue && Model.CoalShortageResponses[genIter].LastModified.Value.Year > 2000)
+                                            {
+                                                itemUpdatedAt = @Model.CoalShortageResponses[genIter].LastModified.Value.ToString("yyyy-MMM-dd HH:mm");
+                                            }
+                                        }
+                                        <span class="row_timestamp">@itemUpdatedAt</span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <br />
+                    <textarea id="coalShortagePasteArea" oninput="onPasteAreaChange(event, 'coal_shortage')" onpaste="onPasteAreaPaste(this)" style="width:100%" placeholder="paste the previous day average, generation loss and remarks columns cells here" type="text"></textarea>
+                }
+                @if (Model.OtherReasonsResponses.Count > 0)
+                {
+                    <hr />
+                    <div class="text-center">
+                        <h2>Generation loss due to other reasons on @Model.RecordDate.ToString("dd-MMM-yyyy")</h2>
+                    </div>
+                    <table class="table table-bordered table-hover" id="other_entry_table">
+                        <colgroup>
+                            <col span="1" style="width: 3%;">
+                            <col span="1" style="width: 15%;">
+                            <col span="1" style="width: 10%;">
+                            <col span="1" style="width: 10%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 37%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 5%;">
+                        </colgroup>
+                        <thead class="other_table_header">
+                            <tr>
+                                <th>S.No</th>
+                                <th>Station</th>
+                                <th>Location</th>
+                                <th>Agency</th>
+                                <th>Capacity</th>
+                                <th>Previous Day Avg (MW)</th>
+                                <th>Generation Loss (MW)</th>
+                                <th>Remarks</th>
+                                <th>Created</th>
+                                <th>Updated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int genIter = 0; genIter < Model.OtherReasonsResponses.Count; genIter++)
+                            {
+                                bool isPlaceHolderResp = true;
+                                if (Model.OtherReasonsResponses[genIter].Id != 0)
+                                {
+                                    isPlaceHolderResp = false;
+                                }
+                                <tr @{if (isPlaceHolderResp) { <text> class="placeholder_response" </text>  } }>
+                                    <td>
+                                        @Model.OtherReasonsResponses[genIter].SerialNum
+                                    </td>
+                                    <td>
+                                        <input asp-for="OtherReasonsResponses[genIter].Id" type="hidden" class="form-control" />
+                                        <input asp-for="OtherReasonsResponses[genIter].DataDate" type="hidden" class="form-control" />
+                                        <textarea asp-for="OtherReasonsResponses[genIter].Station" class="form-control" readonly="@isNotAdmin"></textarea>
+                                        <span asp-validation-for="OtherReasonsResponses[genIter].Station" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        <textarea asp-for="OtherReasonsResponses[genIter].Location" class="form-control" readonly="@isNotAdmin"></textarea>
+                                        <span asp-validation-for="OtherReasonsResponses[genIter].Location" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        <textarea asp-for="OtherReasonsResponses[genIter].Agency" class="form-control" readonly="@isNotAdmin"></textarea>
+                                        <span asp-validation-for="OtherReasonsResponses[genIter].Agency" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        <textarea asp-for="OtherReasonsResponses[genIter].Capacity" class="form-control" readonly="@isNotAdmin"></textarea>
+                                        <span asp-validation-for="OtherReasonsResponses[genIter].Capacity" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        <textarea asp-for="OtherReasonsResponses[genIter].PrevDayAvgMw" class="form-control other_reasons_prev"></textarea>
+                                        <span asp-validation-for="OtherReasonsResponses[genIter].PrevDayAvgMw" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        <textarea asp-for="OtherReasonsResponses[genIter].GenLossMw" class="form-control other_reasons_loss"></textarea>
+                                        <span asp-validation-for="OtherReasonsResponses[genIter].GenLossMw" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        <textarea asp-for="OtherReasonsResponses[genIter].Remarks" class="form-control other_reasons_remarks"></textarea>
+                                        <span asp-validation-for="OtherReasonsResponses[genIter].Remarks" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        @{
+                                            string itemCreatedAt = "";
+                                            if (!isPlaceHolderResp && Model.OtherReasonsResponses[genIter].Created.Year > 2000)
+                                            {
+                                                itemCreatedAt = @Model.OtherReasonsResponses[genIter].Created.ToString("yyyy-MMM-dd HH:mm");
+                                            }
+                                        }
+                                        <span class="row_timestamp">@itemCreatedAt</span>
+                                    </td>
+                                    <td>
+                                        @{
+                                            string itemUpdatedAt = "";
+                                            if (!isPlaceHolderResp && Model.OtherReasonsResponses[genIter].LastModified.HasValue && Model.OtherReasonsResponses[genIter].LastModified.Value.Year > 2000)
+                                            {
+                                                itemUpdatedAt = @Model.OtherReasonsResponses[genIter].LastModified.Value.ToString("yyyy-MMM-dd HH:mm");
+                                            }
+                                        }
+                                        <span class="row_timestamp">@itemUpdatedAt</span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <br />
+                    <textarea id="otherReasonsPasteArea" oninput="onPasteAreaChange(event, 'other_reasons')" onpaste="onPasteAreaPaste(this)" style="width:100%" placeholder="paste the previous day average, generation loss and remarks columns cells here" type="text"></textarea>
+                }
+                @if (Model.CriticalCoalResponses.Count > 0)
+                {
+                    <hr />
+                    <div class="text-center">
+                        <h2>Critical Coal Stock on @Model.RecordDate.ToString("dd-MMM-yyyy")</h2>
+                    </div>
+                    <table class="table table-bordered table-hover" id="critical_entry_table">
+                        <colgroup>
+                            <col span="1" style="width: 3%;">
+                            <col span="1" style="width: 15%;">
+                            <col span="1" style="width: 10%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 42%;">
+                            <col span="1" style="width: 5%;">
+                            <col span="1" style="width: 5%;">
+                        </colgroup>
+                        <thead class="critical_table_header">
+                            <tr>
+                                <th>S.No</th>
+                                <th>Station</th>
+                                <th>Owner</th>
+                                <th>Capacity</th>
+                                <th>Present Generation (MW)</th>
+                                <th>Loss of Generation due to Coal Shortage (MW)</th>
+                                <th>Present Coal Stock (days)</th>
+                                <th>Remarks</th>
+                                <th>Created</th>
+                                <th>Updated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int genIter = 0; genIter < Model.CriticalCoalResponses.Count; genIter++)
+                            {
+                                bool isPlaceHolderResp = true;
+                                if (Model.CriticalCoalResponses[genIter].Id != 0)
+                                {
+                                    isPlaceHolderResp = false;
+                                }
+                                <tr @{if (isPlaceHolderResp) { <text> class="placeholder_response" </text>  } }>
+                                    <td>
+                                        @Model.CriticalCoalResponses[genIter].SerialNum
+                                    </td>
+                                    <td>
+                                        <input asp-for="CriticalCoalResponses[genIter].Id" type="hidden" class="form-control" />
+                                        <input asp-for="CriticalCoalResponses[genIter].DataDate" type="hidden" class="form-control" />
+                                        <textarea asp-for="CriticalCoalResponses[genIter].Station" class="form-control" readonly="@isNotAdmin"></textarea>
+                                        <span asp-validation-for="CriticalCoalResponses[genIter].Station" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        <textarea asp-for="CriticalCoalResponses[genIter].Owner" class="form-control" readonly="@isNotAdmin"></textarea>
+                                        <span asp-validation-for="CriticalCoalResponses[genIter].Owner" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        <textarea asp-for="CriticalCoalResponses[genIter].Capacity" class="form-control" readonly="@isNotAdmin"></textarea>
+                                        <span asp-validation-for="CriticalCoalResponses[genIter].Capacity" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        <textarea asp-for="CriticalCoalResponses[genIter].PresentGenMw" class="form-control critical_coal_present"></textarea>
+                                        <span asp-validation-for="CriticalCoalResponses[genIter].PresentGenMw" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        <textarea asp-for="CriticalCoalResponses[genIter].CoalGenLossMw" class="form-control critical_coal_loss"></textarea>
+                                        <span asp-validation-for="CriticalCoalResponses[genIter].CoalGenLossMw" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        <textarea asp-for="CriticalCoalResponses[genIter].PresentCoalStockDays" class="form-control critical_coal_days"></textarea>
+                                        <span asp-validation-for="CriticalCoalResponses[genIter].PresentCoalStockDays" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        <textarea asp-for="CriticalCoalResponses[genIter].Remarks" class="form-control critical_coal_remarks"></textarea>
+                                        <span asp-validation-for="CriticalCoalResponses[genIter].Remarks" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        @{
+                                            string itemCreatedAt = "";
+                                            if (!isPlaceHolderResp && Model.CriticalCoalResponses[genIter].Created.Year > 2000)
+                                            {
+                                                itemCreatedAt = @Model.CriticalCoalResponses[genIter].Created.ToString("yyyy-MMM-dd HH:mm");
+                                            }
+                                        }
+                                        <span class="row_timestamp">@itemCreatedAt</span>
+                                    </td>
+                                    <td>
+                                        @{
+                                            string itemUpdatedAt = "";
+                                            if (!isPlaceHolderResp && Model.CriticalCoalResponses[genIter].LastModified.HasValue && Model.CriticalCoalResponses[genIter].LastModified.Value.Year > 2000)
+                                            {
+                                                itemUpdatedAt = @Model.CriticalCoalResponses[genIter].LastModified.Value.ToString("yyyy-MMM-dd HH:mm");
+                                            }
+                                        }
+                                        <span class="row_timestamp">@itemUpdatedAt</span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <br />
+                    <textarea id="criticalPasteArea" oninput="onPasteAreaChange(event, 'critical_coal')" onpaste="onPasteAreaPaste(this)" style="width:100%" placeholder="paste the present gen, loss of gen, present coal stock and remarks columns cells here" type="text"></textarea>
+                }
+                @if (Model.CoalShortageResponses.Count > 0 || Model.OtherReasonsResponses.Count > 0 || Model.CriticalCoalResponses.Count > 0)
+                {
+                    <button type="submit" class="btn btn-lg btn-success">Submit</button>
+                }
+            </form>
+        </div>
+    </div>
+    <br />
+    <div class="card bg-light">
+        <div class="card-body">
+            <h4>Notes</h4>
+            <ul>
+                <li>If a row is green, it means data not entered till now</li>
+                <li>Please enter data in all the input fields and press submit button</li>
+            </ul>
+        </div>
+    </div>
+}
+
+@section Scripts{
+    <link rel="stylesheet" type="text/css" href="~/lib/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/node_modules/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/datatables/fixedHeader.dataTables.min.css" />
+    <script src="~/lib/node_modules/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/lib/node_modules/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/lib/node_modules/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/lib/node_modules/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="~/lib/node_modules/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/lib/node_modules/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/lib/node_modules/jszip/dist/jszip.min.js"></script>
+    <script src="~/lib/node_modules/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/lib/node_modules/pdfmake/build/vfs_fonts.js"></script>
+    <script src="~/js/coal_data_entry.js"></script>
+    <style>
+        table tbody tr.placeholder_response {
+            background-color: #0f03;
+        }
+
+        thead.coal_table_header {
+            background-color: #ed553b;
+        }
+
+        thead.other_table_header {
+            background-color: #f6d55c;
+        }
+
+        thead.critical_table_header {
+            background-color: #3caea3;
+        }
+
+        th {
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        textarea.form-control {
+            height: 5em;
+        }
+
+        .table tbody tr td {
+            padding: 0;
+        }
+
+        .row_timestamp {
+            font-size: 1em;
+            color: #808080;
+        }
+    </style>
+}

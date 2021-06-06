@@ -1,0 +1,50 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using CoalShortagePortal.Core
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+
+@if (SignInManager.IsSignedIn(User))
+{
+    @if (User.IsInRole(SecurityConstants.AdminRoleString))
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="UserManage" asp-action="Index">Users</a>
+        </li>
+
+        <!-- Dropdown -->
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" role="button" aria-expanded="false">
+                Generators
+            </a>
+            <ul class="dropdown-menu">
+                <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-controller="CoalShortageGens" asp-action="Index">Coal Shortage</a>
+                <li />
+                <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-controller="OtherReasonGens" asp-action="Index">Other Reason</a>
+                <li />
+                <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-controller="CriticalCoalGens" asp-action="Index">Critical Coal</a>
+                <li />
+            </ul>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" role="button" aria-expanded="false">
+                View Data
+            </a>
+            <ul class="dropdown-menu">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-page="/ViewData/CoalShortage">Coal Shortage</a>
+                <li />
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-page="/ViewData/OtherReasons">Other Reasons</a>
+                <li />
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-page="/ViewData/CriticalCoal">Critical Coal</a>
+                <li />
+            </ul>
+        </li>
+    }
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="CoalData" asp-action="Index">CoalData</a>
+    </li>
+}
+
