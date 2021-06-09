@@ -7,9 +7,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using CoalShortagePortal.Data;
 using CoalShortagePortal.Application.Security;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using CoalShortagePortal.Infrastructure.Services.Email;
+//using Microsoft.AspNetCore.Identity.UI.Services;
+//using CoalShortagePortal.Infrastructure.Services.Email;
 using CoalShortagePortal.Infrastructure;
+//using DNTCaptcha.Core;
+//using System;
 
 namespace CoalShortagePortal.WebApp
 {

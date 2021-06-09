@@ -1,5 +1,6 @@
 ﻿@page
 @model LoginModel
+@addTagHelper *, DNTCaptcha.Core
 
 @{
     ViewData["Title"] = "Log in";
@@ -21,6 +22,29 @@
                     <label asp-for="Input.Password"></label>
                     <input asp-for="Input.Password" class="form-control" />
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="col col-md-2 control-label">
+                        Security code
+                    </label>
+                    <div class="controls col col-md-10">
+                        <dnt-captcha asp-captcha-generator-max="99999"
+                                     asp-captcha-generator-min="11111"
+                                     asp-captcha-generator-language="English"
+                                     asp-captcha-generator-display-mode="ShowDigits"
+                                     asp-use-relative-urls="true"
+                                     asp-placeholder="Security code as a number"
+                                     asp-validation-error-message="Please enter the security code as a number."
+                                     asp-font-name="Tahoma"
+                                     asp-font-size="60"
+                                     asp-fore-color="#333333"
+                                     asp-back-color="#ccc"
+                                     asp-text-box-class="text-box single-line form-control col-md-4"
+                                     asp-text-box-template="<div class='input-group col-md-4'><span class='input-group-addon'><span class='glyphicon glyphicon-lock'></span></span>{0}</div>"
+                                     asp-validation-message-class="text-danger"
+                                     asp-refresh-button-class="glyphicon glyphicon-refresh btn-sm"
+                                     asp-use-noise="false" />
+                    </div>
                 </div>
                 <div class="form-group">
                     <div class="checkbox">

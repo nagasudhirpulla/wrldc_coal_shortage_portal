@@ -1,6 +1,7 @@
 ﻿using CoalShortagePortal.Core.Interfaces.Sms;
 using CoalShortagePortal.Infrastructure.Services.Email;
 using CoalShortagePortal.Infrastructure.Services.Sms;
+using DNTCaptcha.Core;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace CoalShortagePortal.Infrastructure
 {
@@ -28,6 +30,17 @@ namespace CoalShortagePortal.Infrastructure
             // Add Infra services
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<ISmsSender, SmsSender>();
+
+            services.AddDNTCaptcha(options =>
+            {
+                // options.UseSessionStorageProvider(); // -> It doesn't rely on the server or client's times. Also it's the safest one.
+                // options.UseMemoryCacheStorageProvider(); // -> It relies on the server's times. It's safer than the CookieStorageProvider.
+                options.UseCookieStorageProvider() // -> It relies on the server and client's times. It's ideal for scalability, because it doesn't save anything in the server's memory.
+                .ShowThousandsSeparators(false)
+                .WithEncryptionKey(Guid.NewGuid().ToString());
+                // options.UseDistributedCacheStorageProvider(); // --> It's ideal for scalability using `services.AddStackExchangeRedisCache()` for instance.
+                // options.UseDistributedSerializationProvider();
+            });
 
             return services;
         }
