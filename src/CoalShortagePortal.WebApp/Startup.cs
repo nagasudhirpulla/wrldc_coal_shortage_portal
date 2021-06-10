@@ -10,6 +10,7 @@ using CoalShortagePortal.Application.Security;
 //using Microsoft.AspNetCore.Identity.UI.Services;
 //using CoalShortagePortal.Infrastructure.Services.Email;
 using CoalShortagePortal.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
 //using DNTCaptcha.Core;
 //using System;
 
@@ -61,7 +62,8 @@ namespace CoalShortagePortal.WebApp
             services.AddInfrastructure(Configuration, Environment);
 
             services
-                .AddControllersWithViews()
+                .AddControllersWithViews(options =>
+                    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()))
                 .AddRazorRuntimeCompilation();
             services.AddRazorPages();
         }
