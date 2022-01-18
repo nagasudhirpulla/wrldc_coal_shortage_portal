@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using CoalShortagePortal.Core;
 using CoalShortagePortal.WebApp.Extensions;
+using System.Text.RegularExpressions;
 
 namespace CoalShortagePortal.WebApp.Controllers
 {
@@ -34,7 +35,7 @@ namespace CoalShortagePortal.WebApp.Controllers
             return _userManager.GetUserAsync(HttpContext.User);
         }
 
-        public async Task<IActionResult> Index([FromQuery]DateTime? RecordDate)
+        public async Task<IActionResult> Index([FromQuery] DateTime? RecordDate)
         {
             DateTime entryDate;
             if (RecordDate.HasValue)
@@ -54,7 +55,7 @@ namespace CoalShortagePortal.WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Populate([Bind("RecordDate")]GenResponseVM model)
+        public IActionResult Populate([Bind("RecordDate")] GenResponseVM model)
         {
             return RedirectToAction(nameof(Index), new { model.RecordDate });
         }
@@ -71,50 +72,91 @@ namespace CoalShortagePortal.WebApp.Controllers
             // save CoalShortageResponses
             foreach (CoalShortageResponse resp in model.CoalShortageResponses)
             {
+                // input sanitization
+                CoalShortageResponse sanitResp = Sanitize(resp);
                 // check if resp is to be added or inserted
-                if (resp.Id != 0)
+                if (sanitResp.Id != 0)
                 {
-                    _context.Update(resp);
+                    _context.Update(sanitResp);
                 }
                 else
                 {
-                    resp.DataDate = model.RecordDate;
-                    _context.CoalShortageResponses.Add(resp);
+                    sanitResp.DataDate = model.RecordDate;
+                    _context.CoalShortageResponses.Add(sanitResp);
                 }
                 await _context.SaveChangesAsync();
             }
             // save OtherReasonsResponses
             foreach (OtherReasonsResponse resp in model.OtherReasonsResponses)
             {
+                OtherReasonsResponse sanitResp = Sanitize(resp);
                 // check if resp is to be added or inserted
-                if (resp.Id != 0)
+                if (sanitResp.Id != 0)
                 {
-                    _context.Update(resp);
+                    _context.Update(sanitResp);
                 }
                 else
                 {
-                    resp.DataDate = model.RecordDate;
-                    _context.OtherReasonsResponses.Add(resp);
+                    sanitResp.DataDate = model.RecordDate;
+                    _context.OtherReasonsResponses.Add(sanitResp);
                 }
                 await _context.SaveChangesAsync();
             }
             // save CriticalCoalResponses
             foreach (CriticalCoalResponse resp in model.CriticalCoalResponses)
             {
+                CriticalCoalResponse sanitResp = Sanitize(resp);
                 // check if resp is to be added or inserted
-                if (resp.Id != 0)
+                if (sanitResp.Id != 0)
                 {
-                    _context.Update(resp);
+                    _context.Update(sanitResp);
                 }
                 else
                 {
-                    resp.DataDate = model.RecordDate;
-                    _context.CriticalCoalResponses.Add(resp);
+                    sanitResp.DataDate = model.RecordDate;
+                    _context.CriticalCoalResponses.Add(sanitResp);
                 }
                 await _context.SaveChangesAsync();
             }
             // redirect to the same page
             return RedirectToAction(nameof(Index), new { model.RecordDate }).WithSuccess("Coal data saved");
+        }
+
+        private static string SanitizeText(string inpTxt)
+        {
+            if (inpTxt == null)
+            {
+                return inpTxt;
+            }
+            Regex rgx = new("[^a-zA-Z0-9,._)( -]");
+            string sanTxt = rgx.Replace(inpTxt, "");
+            return sanTxt;
+        }
+
+        private static CoalShortageResponse Sanitize(CoalShortageResponse resp)
+        {
+            resp.Station = SanitizeText(resp.Station);
+            resp.Location = SanitizeText(resp.Location);
+            resp.Agency = SanitizeText(resp.Agency);
+            resp.Remarks = SanitizeText(resp.Remarks);
+            return resp;
+        }
+
+        private static OtherReasonsResponse Sanitize(OtherReasonsResponse resp)
+        {
+            resp.Station = SanitizeText(resp.Station);
+            resp.Location = SanitizeText(resp.Location);
+            resp.Agency = SanitizeText(resp.Agency);
+            resp.Remarks = SanitizeText(resp.Remarks);
+            return resp;
+        }
+
+        private static CriticalCoalResponse Sanitize(CriticalCoalResponse resp)
+        {
+            resp.Station = SanitizeText(resp.Station);
+            resp.Owner = SanitizeText(resp.Owner);
+            resp.Remarks = SanitizeText(resp.Remarks);
+            return resp;
         }
 
         //helper function

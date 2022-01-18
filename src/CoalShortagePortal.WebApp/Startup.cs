@@ -82,6 +82,14 @@ namespace CoalShortagePortal.WebApp
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            // https://dotnetcoretutorials.com/2017/01/08/set-x-frame-options-asp-net-core/
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers.Add("X-Frame-Options", "SAMEORIGIN");
+                await next();
+            });
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

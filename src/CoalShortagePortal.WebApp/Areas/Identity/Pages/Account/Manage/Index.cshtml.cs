@@ -62,36 +62,36 @@ namespace CoalShortagePortal.WebApp.Areas.Identity.Pages.Account.Manage
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
+        //public async Task<IActionResult> OnPostAsync()
+        //{
+        //    var user = await _userManager.GetUserAsync(User);
+        //    if (user == null)
+        //    {
+        //        return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+        //    }
 
-            if (!ModelState.IsValid)
-            {
-                await LoadAsync(user);
-                return Page();
-            }
+        //    if (!ModelState.IsValid)
+        //    {
+        //        await LoadAsync(user);
+        //        return Page();
+        //    }
 
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
-            {
-                // verify phone here itself
-                string phoneChangeToken = await _userManager.GenerateChangePhoneNumberTokenAsync(user, Input.PhoneNumber);
-                IdentityResult setPhoneResult = await _userManager.ChangePhoneNumberAsync(user, Input.PhoneNumber, phoneChangeToken);
-                if (!setPhoneResult.Succeeded)
-                {
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
-                }
-            }
+        //    var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+        //    if (Input.PhoneNumber != phoneNumber)
+        //    {
+        //        // verify phone here itself
+        //        string phoneChangeToken = await _userManager.GenerateChangePhoneNumberTokenAsync(user, Input.PhoneNumber);
+        //        IdentityResult setPhoneResult = await _userManager.ChangePhoneNumberAsync(user, Input.PhoneNumber, phoneChangeToken);
+        //        if (!setPhoneResult.Succeeded)
+        //        {
+        //            var userId = await _userManager.GetUserIdAsync(user);
+        //            throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
+        //        }
+        //    }
 
-            await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
-            return RedirectToPage();
-        }
+        //    await _signInManager.RefreshSignInAsync(user);
+        //    StatusMessage = "Your profile has been updated";
+        //    return RedirectToPage();
+        //}
     }
 }

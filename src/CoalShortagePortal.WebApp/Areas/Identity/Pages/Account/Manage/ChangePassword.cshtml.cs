@@ -80,6 +80,12 @@ namespace CoalShortagePortal.WebApp.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
+            if (Input.OldPassword == Input.NewPassword)
+            {
+                ModelState.AddModelError(string.Empty, "Old and new passwords should not match");
+                return Page();
+            }
+
             var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
             if (!changePasswordResult.Succeeded)
             {
