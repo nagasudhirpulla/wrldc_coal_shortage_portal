@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using CoalShortagePortal.Core;
 using CoalShortagePortal.WebApp.Extensions;
 using System.Text.RegularExpressions;
+using CoalShortagePortal.WebApp.Utils;
 
 namespace CoalShortagePortal.WebApp.Controllers
 {
@@ -122,40 +123,29 @@ namespace CoalShortagePortal.WebApp.Controllers
             return RedirectToAction(nameof(Index), new { model.RecordDate }).WithSuccess("Coal data saved");
         }
 
-        private static string SanitizeText(string inpTxt)
-        {
-            if (inpTxt == null)
-            {
-                return inpTxt;
-            }
-            Regex rgx = new("[^a-zA-Z0-9,._)( -]");
-            string sanTxt = rgx.Replace(inpTxt, "");
-            return sanTxt;
-        }
-
         private static CoalShortageResponse Sanitize(CoalShortageResponse resp)
         {
-            resp.Station = SanitizeText(resp.Station);
-            resp.Location = SanitizeText(resp.Location);
-            resp.Agency = SanitizeText(resp.Agency);
-            resp.Remarks = SanitizeText(resp.Remarks);
+            resp.Station = TextUtils.SanitizeText(resp.Station);
+            resp.Location = TextUtils.SanitizeText(resp.Location);
+            resp.Agency = TextUtils.SanitizeText(resp.Agency);
+            resp.Remarks = TextUtils.SanitizeText(resp.Remarks);
             return resp;
         }
 
         private static OtherReasonsResponse Sanitize(OtherReasonsResponse resp)
         {
-            resp.Station = SanitizeText(resp.Station);
-            resp.Location = SanitizeText(resp.Location);
-            resp.Agency = SanitizeText(resp.Agency);
-            resp.Remarks = SanitizeText(resp.Remarks);
+            resp.Station = TextUtils.SanitizeText(resp.Station);
+            resp.Location = TextUtils.SanitizeText(resp.Location);
+            resp.Agency = TextUtils.SanitizeText(resp.Agency);
+            resp.Remarks = TextUtils.SanitizeText(resp.Remarks);
             return resp;
         }
 
         private static CriticalCoalResponse Sanitize(CriticalCoalResponse resp)
         {
-            resp.Station = SanitizeText(resp.Station);
-            resp.Owner = SanitizeText(resp.Owner);
-            resp.Remarks = SanitizeText(resp.Remarks);
+            resp.Station = TextUtils.SanitizeText(resp.Station);
+            resp.Owner = TextUtils.SanitizeText(resp.Owner);
+            resp.Remarks = TextUtils.SanitizeText(resp.Remarks);
             return resp;
         }
 
@@ -163,7 +153,7 @@ namespace CoalShortagePortal.WebApp.Controllers
         private async Task<GenResponseVM> PopulateVMForUserDate(string userId, bool usrIsAdmin, DateTime entryDate)
         {
             // generate view model for the user response based on the entryDate
-            GenResponseVM vm = new GenResponseVM() { RecordDate = entryDate };
+            GenResponseVM vm = new() { RecordDate = entryDate };
 
             // get the coal shortage generators that user is assigned
             List<GeneratingStationForCoalShortage> coalShortageGens = await _context.GeneratingStationForCoalShortages

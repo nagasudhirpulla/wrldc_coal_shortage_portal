@@ -7,12 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using CoalShortagePortal.Data;
 using CoalShortagePortal.Application.Security;
-//using Microsoft.AspNetCore.Identity.UI.Services;
-//using CoalShortagePortal.Infrastructure.Services.Email;
 using CoalShortagePortal.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
-//using DNTCaptcha.Core;
-//using System;
 
 namespace CoalShortagePortal.WebApp
 {
@@ -57,7 +53,12 @@ namespace CoalShortagePortal.WebApp
                 // https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-3.1&tabs=visual-studio
                 options.LoginPath = "/Identity/Account/Login";
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
             });
+
+            services.Configure<CookieTempDataProviderOptions>(options =>
+                options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest
+            );
 
             services.AddInfrastructure(Configuration, Environment);
 
@@ -84,11 +85,16 @@ namespace CoalShortagePortal.WebApp
             }
 
             // https://dotnetcoretutorials.com/2017/01/08/set-x-frame-options-asp-net-core/
-            app.Use(async (context, next) =>
-            {
-                context.Response.Headers.Add("X-Frame-Options", "SAMEORIGIN");
-                await next();
-            });
+            //app.Use(async (context, next) =>
+            //{
+            //    context.Response.Headers.Add("X-Frame-Options", "SAMEORIGIN");
+            //    context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
+            //    context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+            //    context.Response.Headers.Add("Content-Security-Policy",
+            //                 "default-src 'self'");
+            //    context.Response.Headers.Add("Cache-Control", "private");
+            //    await next();
+            //});
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

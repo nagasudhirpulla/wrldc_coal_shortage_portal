@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using CoalShortagePortal.Core.Entities;
 using System;
 using CoalShortagePortal.WebApp.Extensions;
+using System.Text.RegularExpressions;
+using CoalShortagePortal.WebApp.Utils;
 
 namespace CoalShortagePortal.WebApp.Controllers
 {
@@ -32,7 +34,7 @@ namespace CoalShortagePortal.WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            GenCoalShortageListVM vm = new GenCoalShortageListVM
+            GenCoalShortageListVM vm = new()
             {
                 // get the list of generators
                 Gens = await _context.GeneratingStationForCoalShortages.OrderBy(x => x.SerialNum).Select(g => new GenCoalShortageListItemVM()
@@ -79,17 +81,17 @@ namespace CoalShortagePortal.WebApp.Controllers
                 if (await CheckIfOverlapExists(vm.StartDate, vm.Name))
                 {
                     // todo use custom exception for this
-                    throw new Exception($"An overlapping entry exists for {vm.Name}, hence we are unable to create this generator for these {vm.StartDate.ToString("dd-MMM-yyyy")} and {vm.EndDate.ToString("dd-MMM-yyyy")} dates");
+                    throw new Exception($"An overlapping entry exists for {vm.Name}, hence we are unable to create this generator for these {vm.StartDate:dd-MMM-yyyy} and {vm.EndDate:dd-MMM-yyyy} dates");
                 }
 
-                GeneratingStationForCoalShortage gen = new GeneratingStationForCoalShortage
+                GeneratingStationForCoalShortage gen = new()
                 {
                     StartDate = vm.StartDate,
                     EndDate = vm.EndDate,
                     SerialNum = vm.SerialNum,
-                    Name = vm.Name,
-                    Location = vm.Location,
-                    Agency = vm.Agency,
+                    Name = TextUtils.SanitizeText(vm.Name),
+                    Location = TextUtils.SanitizeText(vm.Location),
+                    Agency = TextUtils.SanitizeText(vm.Agency),
                     Capacity = vm.Capacity,
                     Region = vm.Region,
                     UserId = vm.UserId
@@ -130,7 +132,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                 return NotFound();
             }
 
-            GenCoalShortageCreateVM vm = new GenCoalShortageCreateVM()
+            GenCoalShortageCreateVM vm = new()
             {
                 StartDate = gen.StartDate,
                 EndDate = gen.EndDate,
@@ -172,7 +174,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                     if (await CheckIfOverlapExists(vm.StartDate, vm.Name, id))
                     {
                         // todo use custom exception for this
-                        throw new Exception($"An overlapping entry exists for {vm.Name}, hence we are unable to edit this generator for these {vm.StartDate.ToString("dd-MMM-yyyy")} and {vm.EndDate.ToString("dd-MMM-yyyy")} dates");
+                        throw new Exception($"An overlapping entry exists for {vm.Name}, hence we are unable to edit this generator for these {vm.StartDate:dd-MMM-yyyy} and {vm.EndDate:dd-MMM-yyyy} dates");
                     }
                 }
 
@@ -180,9 +182,9 @@ namespace CoalShortagePortal.WebApp.Controllers
                 gen.SerialNum = vm.SerialNum;
                 gen.StartDate = vm.StartDate;
                 gen.EndDate = vm.EndDate;
-                gen.Name = vm.Name;
-                gen.Location = vm.Location;
-                gen.Agency = vm.Agency;
+                gen.Name = TextUtils.SanitizeText(vm.Name);
+                gen.Location = TextUtils.SanitizeText(vm.Location);
+                gen.Agency = TextUtils.SanitizeText(vm.Agency);
                 gen.Capacity = vm.Capacity;
                 gen.Region = vm.Region;
                 gen.UserId = vm.UserId;
@@ -225,7 +227,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                 return NotFound();
             }
 
-            GenCoalShortageCreateVM vm = new GenCoalShortageCreateVM()
+            GenCoalShortageCreateVM vm = new()
             {
                 StartDate = gen.StartDate,
                 EndDate = gen.EndDate,

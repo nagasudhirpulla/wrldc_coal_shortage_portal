@@ -18,10 +18,15 @@ namespace CoalShortagePortal.WebApp.Models
 
         [Required]
         [Display(Name = "Station")]
+        [MaxLength(200)]
         public string Name { get; set; }
+
         [Required]
+        [MaxLength(200)]
         public string Location { get; set; }
+
         [Required]
+        [MaxLength(200)]
         public string Agency { get; set; }
 
         [Required]

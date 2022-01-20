@@ -18,8 +18,11 @@ namespace CoalShortagePortal.WebApp.Models
 
         [Required]
         [Display(Name = "Station")]
+        [MaxLength(200)]
         public string Name { get; set; }
+
         [Required]
+        [MaxLength(200)]
         public string Owner { get; set; }
 
         [Required]
@@ -27,7 +30,7 @@ namespace CoalShortagePortal.WebApp.Models
         public double Capacity { get; set; }
 
         [Required]
-        public RegionName Region{ get; set; }
+        public RegionName Region { get; set; }
 
         [Required]
         [Display(Name = "User")]

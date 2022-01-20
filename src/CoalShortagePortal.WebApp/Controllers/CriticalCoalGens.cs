@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using CoalShortagePortal.Core.Entities;
 using System;
 using CoalShortagePortal.WebApp.Extensions;
+using CoalShortagePortal.WebApp.Utils;
 
 namespace CoalShortagePortal.WebApp.Controllers
 {
@@ -32,7 +33,7 @@ namespace CoalShortagePortal.WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            GenCriticalCoalListVM vm = new GenCriticalCoalListVM
+            GenCriticalCoalListVM vm = new()
             {
                 // get the list of generators
                 Gens = await _context.GeneratingStationForCriticalCoals.OrderBy(x => x.SerialNum).Select(g => new GenCriticalCoalListItemVM()
@@ -78,16 +79,16 @@ namespace CoalShortagePortal.WebApp.Controllers
                 if (await CheckIfOverlapExists(vm.StartDate, vm.Name))
                 {
                     // todo use custom exception for this
-                    throw new Exception($"An overlapping entry exists for {vm.Name}, hence we are unable to create this generator for these {vm.StartDate.ToString("dd-MMM-yyyy")} and {vm.EndDate.ToString("dd-MMM-yyyy")} dates");
+                    throw new Exception($"An overlapping entry exists for {vm.Name}, hence we are unable to create this generator for these {vm.StartDate:dd-MMM-yyyy} and {vm.EndDate:dd-MMM-yyyy} dates");
                 }
 
-                GeneratingStationForCriticalCoal gen = new GeneratingStationForCriticalCoal
+                GeneratingStationForCriticalCoal gen = new()
                 {
                     StartDate = vm.StartDate,
                     EndDate = vm.EndDate,
                     SerialNum = vm.SerialNum,
-                    Name = vm.Name,
-                    Owner = vm.Owner,
+                    Name = TextUtils.SanitizeText(vm.Name),
+                    Owner = TextUtils.SanitizeText(vm.Owner),
                     Capacity = vm.Capacity,
                     Region = vm.Region,
                     UserId = vm.UserId
@@ -128,7 +129,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                 return NotFound();
             }
 
-            GenCriticalCoalCreateVM vm = new GenCriticalCoalCreateVM()
+            GenCriticalCoalCreateVM vm = new()
             {
                 StartDate = gen.StartDate,
                 EndDate = gen.EndDate,
@@ -169,7 +170,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                     if (await CheckIfOverlapExists(vm.StartDate, vm.Name, id))
                     {
                         // todo use custom exception for this
-                        throw new Exception($"An overlapping entry exists for {vm.Name}, hence we are unable to edit this generator for these {vm.StartDate.ToString("dd-MMM-yyyy")} and {vm.EndDate.ToString("dd-MMM-yyyy")} dates");
+                        throw new Exception($"An overlapping entry exists for {vm.Name}, hence we are unable to edit this generator for these {vm.StartDate:dd-MMM-yyyy} and {vm.EndDate:dd-MMM-yyyy} dates");
                     }
                 }
 
@@ -177,8 +178,8 @@ namespace CoalShortagePortal.WebApp.Controllers
                 gen.StartDate = vm.StartDate;
                 gen.EndDate = vm.EndDate;
                 gen.SerialNum = vm.SerialNum;
-                gen.Name = vm.Name;
-                gen.Owner = vm.Owner;
+                gen.Name = TextUtils.SanitizeText(vm.Name);
+                gen.Owner = TextUtils.SanitizeText(vm.Owner);
                 gen.Capacity = vm.Capacity;
                 gen.UserId = vm.UserId;
                 gen.Region = vm.Region;
@@ -221,7 +222,7 @@ namespace CoalShortagePortal.WebApp.Controllers
                 return NotFound();
             }
 
-            GenCriticalCoalCreateVM vm = new GenCriticalCoalCreateVM()
+            GenCriticalCoalCreateVM vm = new()
             {
                 StartDate = gen.StartDate,
                 EndDate = gen.EndDate,
