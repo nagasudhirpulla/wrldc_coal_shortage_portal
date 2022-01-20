@@ -12,7 +12,7 @@
     "@fortawesome/fontawesome-free": "^5.15.3",
     "@popperjs/core": "^2.9.2",
     "bootstrap": "^5.0.1",
-    "datatables.net-bs4": "^1.10.25",
+    "datatables.net-bs4": "^1.11.3",
     "datatables.net-buttons-bs4": "^1.7.1",
     "datatables.net-buttons-dt": "^1.7.1",
     "datatables.net-dt": "^1.10.25",
@@ -22,7 +22,7 @@
     "jquery": "^3.6.0",
     "jquery-validation": "^1.19.3",
     "jquery-validation-unobtrusive": "^3.2.12",
-    "jszip": "^3.6.0",
+    "jszip": "^3.7.1",
     "pdfmake": "^0.1.71",
     "plotly.js-cartesian-dist": "^1.54.1"
   }
