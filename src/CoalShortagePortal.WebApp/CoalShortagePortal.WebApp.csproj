@@ -18,6 +18,7 @@
     <Content Include="wwwroot\lib\node_modules\datatables.net-bs4\css\dataTables.bootstrap4.min.css" />
     <Content Include="wwwroot\lib\node_modules\datatables.net-buttons-bs4\css\buttons.bootstrap4.css" />
     <Content Include="wwwroot\lib\node_modules\datatables.net-buttons-bs4\css\buttons.bootstrap4.min.css" />
+    <Content Include="wwwroot\lib\node_modules\flatpickr\dist\flatpickr.min.css" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,6 +41,7 @@
     <None Include="wwwroot\lib\node_modules\datatables.net-fixedheader\js\dataTables.fixedHeader.min.js" />
     <None Include="wwwroot\lib\node_modules\datatables.net\js\jquery.dataTables.js" />
     <None Include="wwwroot\lib\node_modules\datatables.net\js\jquery.dataTables.min.js" />
+    <None Include="wwwroot\lib\node_modules\flatpickr\dist\flatpickr.min.js" />
     <None Include="wwwroot\lib\node_modules\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.js" />
     <None Include="wwwroot\lib\node_modules\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.min.js" />
     <None Include="wwwroot\lib\node_modules\jquery-validation\dist\jquery.validate.js" />

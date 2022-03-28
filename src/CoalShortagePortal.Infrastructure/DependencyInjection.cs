@@ -1,5 +1,6 @@
 ﻿using CoalShortagePortal.Core.Interfaces.Sms;
 using CoalShortagePortal.Infrastructure.Services.Email;
+using CoalShortagePortal.Infrastructure.Services.ReportingData;
 using CoalShortagePortal.Infrastructure.Services.Sms;
 using DNTCaptcha.Core;
 using Microsoft.AspNetCore.Hosting;
@@ -30,6 +31,7 @@ namespace CoalShortagePortal.Infrastructure
             // Add Infra services
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<ISmsSender, SmsSender>();
+            services.AddTransient<ReportingDataService>();
 
             services.AddDNTCaptcha(options =>
             {
