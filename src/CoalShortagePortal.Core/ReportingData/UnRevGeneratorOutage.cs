@@ -13,14 +13,14 @@ namespace CoalShortagePortal.Core.ReportingData
         public int ElementId { get; set; }
         public string ElementName { get; set; }
 
+        public double InstalledCapacity { get; set; }
+
         public int OutageTypeId { get; set; }
         public string OutageType { get; set; }
 
-        public string Reason { get; set; }
+        public string OutageReason { get; set; }
         public DateTime OutageDateTime { get; set; }
-        public DateTime? ExpectedRevivalDateTime { get; set; } = null;
-
-        public string OutageRemarks { get; set; }
+        public DateTime? ExpectedDateTime { get; set; }
 
         public string OutageTag { get; set; }
 

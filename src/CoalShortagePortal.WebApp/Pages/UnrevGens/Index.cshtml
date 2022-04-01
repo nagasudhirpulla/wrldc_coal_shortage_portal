@@ -1,0 +1,140 @@
+﻿@page
+@model UnRevGensModel
+@{
+    ViewData["Title"] = "Un-Revived Generators";
+}
+
+<form method="post">
+    <div class="form-inline">
+        <div class="mb-2">
+            <input type="date" value="@Model.RecordDate.ToString("yyyy-MM-dd")" name="RecordDate">
+            <span asp-validation-for="RecordDate" class="text-danger"></span>
+            <input style="margin-left:8px" type="submit" class="btn btn-primary mb-2" value="Select Date" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            @if (Model.RevivalResponses.Count > 0)
+            {
+                <table class="table table-bordered table-hover" id="display_table">
+                    <thead class="table_header">
+                        <tr>
+                            <th>Name</th>
+                            <th>Installed Capacity</th>
+                            <th>Outage Time</th>
+                            <th>Expected Time</th>
+                            <th>Remarks</th>
+                            <th>Owners</th>
+                            <th>Reason</th>
+                            <th>Outage Type</th>
+                            <th>Created At</th>
+                            <th>Updated At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int genIter = 0; genIter < Model.RevivalResponses.Count; genIter++)
+                        {
+                            <tr>
+                                <td>
+                                    <input asp-for="RevivalResponses[genIter].Id" type="hidden" class="form-control" />
+                                    <input asp-for="RevivalResponses[genIter].DataDate" type="hidden" class="form-control" />
+                                    <input asp-for="RevivalResponses[genIter].RTOutageId" type="hidden" class="form-control" />
+                                    <textarea asp-for="RevivalResponses[genIter].ElementName" class="form-control" readonly></textarea>
+                                </td>
+                                <td>
+                                    <textarea asp-for="RevivalResponses[genIter].InstalledCapacity" class="form-control" readonly></textarea>
+                                </td>
+                                <td>
+                                    <textarea asp-for="RevivalResponses[genIter].OutageDateTime" class="form-control" readonly></textarea>
+                                </td>
+                                <td>
+                                    <input asp-for="RevivalResponses[genIter].ExpectedRevivalTime" class="form-control datetimepicker" />
+                                </td>
+                                <td>
+                                    <textarea asp-for="RevivalResponses[genIter].Remarks" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                    <textarea asp-for="RevivalResponses[genIter].ElementOwners" class="form-control" readonly></textarea>
+                                </td>
+                                <td>
+                                    <textarea asp-for="RevivalResponses[genIter].OutageReason" class="form-control" readonly></textarea>
+                                </td>
+                                <td>
+                                    <textarea asp-for="RevivalResponses[genIter].OutageType" class="form-control" readonly></textarea>
+                                </td>
+                                <td>
+                                    <span class="row_timestamp">@Model.RevivalResponses[genIter].Created.ToString("yyyy-MM-dd HH:mm")</span>
+                                </td>
+                                <td>
+                                    <span class="row_timestamp">@Model.RevivalResponses[genIter].LastModified?.ToString("yyyy-MM-dd HH:mm")</span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <input type="submit" class="btn btn-lg btn-success" value="Submit" asp-page-handler="Submit" />
+            }
+        </div>
+    </div>
+</form>
+<div class="alert alert-secondary" role="alert">
+    Please enter expected revival date and remarks for the generating units
+</div>
+
+@section Scripts{
+<link rel="stylesheet" type="text/css" href="~/lib/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css" />
+<link rel="stylesheet" type="text/css" href="~/lib/node_modules/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" />
+<link rel="stylesheet" type="text/css" href="~/lib/datatables/fixedHeader.dataTables.min.css" />
+<link rel="stylesheet" type="text/css" href="~/lib/node_modules/flatpickr/dist/flatpickr.min.css">
+<script src="~/lib/node_modules/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/lib/node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="~/lib/node_modules/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="~/lib/node_modules/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+<script src="~/lib/node_modules/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script src="~/lib/node_modules/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="~/lib/node_modules/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="~/lib/node_modules/jszip/dist/jszip.min.js"></script>
+<script src="~/lib/node_modules/pdfmake/build/pdfmake.min.js"></script>
+<script src="~/lib/node_modules/pdfmake/build/vfs_fonts.js"></script>
+<script src="~/lib/node_modules/flatpickr/dist/flatpickr.min.js"></script>
+<style>
+
+    th {
+        font-weight: bold;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    textarea.form-control {
+        height: 2em;
+    }
+
+    .table tbody tr td {
+        padding: 0;
+    }
+
+    .row_timestamp {
+        font-size: 0.8em;
+        color: #808080;
+    }
+</style>
+<script>
+        $(".datetimepicker").flatpickr({
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            altFormat: "Y-m-d H:i"
+        });
+        $(document).ready(function () {
+        var table = $('#display_table').DataTable({
+                fixedColumns: true,
+                fixedHeader: true,
+                //"lengthMenu": [[10, 20, -1], [10, 20, "All"]],
+                "pageLength": -1,
+                dom: 'Bfrtip',
+                buttons: ['copy', 'pdf', 'print'],
+                "order": [[ 5, "asc" ], [2, "desc"]]
+            });
+    });
+</script>
+}

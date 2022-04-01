@@ -18,7 +18,7 @@ namespace CoalShortagePortal.Infrastructure.Services.ReportingData
             _logger = logger;
         }
 
-        public List<UnRevGeneratorOutage> GetLatestUnrevivedGenOutages()
+        public List<UnRevGeneratorOutage> GetLatestUnrevivedGenOutages(DateTime targetDt)
         {
             List<UnRevGeneratorOutage> unrevOutages = new();
 
@@ -32,17 +32,15 @@ namespace CoalShortagePortal.Infrastructure.Services.ReportingData
     rto.shut_down_type_id,
     rto.shut_down_type_name,
     rto.elementname,
+    rto.INSTALLED_CAPACITY,
     trunc(rto.outage_date) AS outage_date,
     rto.outage_time,
-    rto.revived_date,
-    rto.revived_time,
-    rto.expected_date,
-	rto.expected_time,
+    trunc(rto.expected_date) as expected_date,
+    rto.expected_time,
     rto.reason,
     rto.owners,
     rto.shutdown_tag,
-    rto.shutdown_tag_id,
-    rto.outage_remarks
+    rto.shutdown_tag_id
 FROM
          (
         SELECT
@@ -60,6 +58,7 @@ FROM
             outages.expected_time,
             ent_master.entity_name,
             owner_details.owners,
+            gu.INSTALLED_CAPACITY, 
             reas.reason,
             sd_type.id             AS shut_down_type_id,
             sd_type.name           AS shut_down_type_name,
@@ -101,6 +100,7 @@ FROM
                 || outage_time) AS out_date_time
         FROM
             reporting_web_ui_uat.real_time_outage
+        where outage_date<=:targetDt 
         GROUP BY
             entity_id,
             element_id
@@ -111,19 +111,19 @@ WHERE rto.entity_name='GENERATING_UNIT' AND rto.revived_time IS NULL
 ORDER BY
     rto.out_date_time DESC
 ";
-
+            cmd.Parameters.Add(new OracleParameter("targetDt", new DateTime(targetDt.Year, targetDt.Month, targetDt.Day, 23, 59, 59)));
             OracleDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-                UnRevGeneratorOutage req = new();
-                req.RTOutageId = DbUtils.SafeGetInt(reader, "ID");
+                UnRevGeneratorOutage outage = new();
+                outage.RTOutageId = DbUtils.SafeGetInt(reader, "ID");
 
-                req.ElementId = DbUtils.SafeGetInt(reader, "ELEMENT_ID");
-                req.ElementName = DbUtils.SafeGetString(reader, "ELEMENTNAME");
+                outage.ElementId = DbUtils.SafeGetInt(reader, "ELEMENT_ID");
+                outage.ElementName = DbUtils.SafeGetString(reader, "ELEMENTNAME");
 
 
-                req.OutageTypeId = DbUtils.SafeGetInt(reader, "SHUT_DOWN_TYPE_ID");
-                req.OutageType = DbUtils.SafeGetString(reader, "SHUT_DOWN_TYPE_NAME");
+                outage.OutageTypeId = DbUtils.SafeGetInt(reader, "SHUT_DOWN_TYPE_ID");
+                outage.OutageType = DbUtils.SafeGetString(reader, "SHUT_DOWN_TYPE_NAME");
 
                 // derive outage DateTime
                 DateTime? outageDate = DbUtils.SafeGetDt(reader, "OUTAGE_DATE");
@@ -136,21 +136,35 @@ ORDER BY
                 try
                 {
                     DateTime outageDt = DateTime.ParseExact($"{outageDate?.ToString("yyyy-MM-dd")} {outageTimeStr[..5]}", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
-                    req.OutageDateTime = outageDt;
+                    outage.OutageDateTime = outageDt;
                 }
                 catch (FormatException)
                 {
                     continue;
                 }
 
+                // derive expected revival DateTime
+                DateTime? expectedDate = DbUtils.SafeGetDt(reader, "EXPECTED_DATE");
+                string expectedTimeStr = DbUtils.SafeGetString(reader, "EXPECTED_TIME");
+                bool isexpectedTimeStrValid = (expectedDate != null) && (!string.IsNullOrWhiteSpace(expectedTimeStr)) && (expectedTimeStr.Length >= 5);
+                if (isexpectedTimeStrValid)
+                {
+                    try
+                    {
+                        DateTime expectedDt = DateTime.ParseExact($"{expectedDate?.ToString("yyyy-MM-dd")} {expectedTimeStr[..5]}", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+                        outage.ExpectedDateTime = expectedDt;
+                    }
+                    catch (FormatException)
+                    {
+                        continue;
+                    }
+                }
 
-                req.Reason = DbUtils.SafeGetString(reader, "REASON");
-
-                req.OutageTag = DbUtils.SafeGetString(reader, "SHUTDOWN_TAG");
-
-                req.OutageRemarks = DbUtils.SafeGetString(reader, "OUTAGE_REMARKS");
-                req.ElementOwners = DbUtils.SafeGetString(reader, "OWNERS");
-                unrevOutages.Add(req);
+                outage.OutageReason = DbUtils.SafeGetString(reader, "REASON");
+                outage.OutageTag = DbUtils.SafeGetString(reader, "SHUTDOWN_TAG");
+                outage.ElementOwners = DbUtils.SafeGetString(reader, "OWNERS");
+                outage.InstalledCapacity = DbUtils.SafeGetDouble(reader, "INSTALLED_CAPACITY");
+                unrevOutages.Add(outage);
             }
             reader.Dispose();
             return unrevOutages;

@@ -33,6 +33,19 @@ namespace CoalShortagePortal.Infrastructure.Services.ReportingData
             return SafeGetInt(reader, colIndex);
         }
 
+        public static double SafeGetDouble(OracleDataReader reader, int colIndex)
+        {
+            if (!reader.IsDBNull(colIndex))
+                return reader.GetDouble(colIndex);
+            return -1;
+        }
+
+        public static double SafeGetDouble(OracleDataReader reader, string colName)
+        {
+            int colIndex = reader.GetOrdinal(colName);
+            return SafeGetDouble(reader, colIndex);
+        }
+
         public static DateTime? SafeGetDt(OracleDataReader reader, int colIndex)
         {
             if (!reader.IsDBNull(colIndex))
