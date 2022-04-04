@@ -119,22 +119,42 @@
         color: #808080;
     }
 </style>
-<script>
+<script type="application/javascript">
         $(".datetimepicker").flatpickr({
             enableTime: true,
             dateFormat: "Y-m-d H:i",
             altFormat: "Y-m-d H:i"
         });
         $(document).ready(function () {
-        var table = $('#display_table').DataTable({
-                fixedColumns: true,
-                fixedHeader: true,
-                //"lengthMenu": [[10, 20, -1], [10, 20, "All"]],
-                "pageLength": -1,
-                dom: 'Bfrtip',
-                buttons: ['copy', 'pdf', 'print'],
-                "order": [[ 5, "asc" ], [2, "desc"]]
-            });
+            // https://stackoverflow.com/questions/62145571/jquery-datatables-export-input-text-option-and-not-export-specific-column-at-sam
+            var table = $('#display_table').DataTable({
+                    fixedColumns: true,
+                    fixedHeader: true,
+                    //"lengthMenu": [[10, 20, -1], [10, 20, "All"]],
+                    "pageLength": -1,
+                    dom: 'Bfrtip',
+                    "order": [[ 5, "asc" ], [2, "desc"]],
+                    buttons: [
+                            {
+                                extend: 'excel',
+                                exportOptions: {
+                                    format: {
+                                        body: function ( inner, rowidx, colidx, node ) {
+                                            if ($(node).children("input:not([type=hidden])").length > 0) {
+                                                return $(node).children("input:not([type=hidden])").first().val();
+                                            } else if ($(node).children("textarea:not([type=hidden])").length > 0) {
+                                                return $(node).children("textarea:not([type=hidden])").first().val();
+                                            } else if ($(node).children("span:not([type=hidden])").length > 0) {
+                                                return $(node).children("span:not([type=hidden]):first-child").html();
+                                            } else {
+                                                return "";
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                });
     });
 </script>
 }
