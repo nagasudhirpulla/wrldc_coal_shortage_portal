@@ -23,7 +23,7 @@
     "jquery": "^3.6.0",
     "jquery-validation": "^1.19.3",
     "jquery-validation-unobtrusive": "^3.2.12",
-    "jszip": "^3.7.1",
+    "jszip": "^3.8.0",
     "pdfmake": "^0.1.71",
     "plotly.js-cartesian-dist": "^1.54.1"
   }
